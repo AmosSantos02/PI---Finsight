@@ -10,13 +10,18 @@
 | Item | Detalhe |
 |---|---|
 | Framework backend | Spring Boot |
-| Banco de dados | H2 arquivo local (persiste entre reinicializações) |
+| Banco de dados | **Supabase (PostgreSQL na nuvem)** |
 | Frontend | HTML/CSS/JS vanilla |
-| Ambiente | **100% local** — tudo roda na mesma máquina |
+| Ambiente | Frontend + Backend rodam local — banco fica na nuvem |
 | URL do backend | `http://localhost:8080` |
-| URL do frontend | `http://localhost:3000` (ou abrir HTML direto no browser) |
+| URL do frontend | `http://localhost:3000` (via `npx serve`) |
 | Autenticação | Sem JWT — `clienteId` salvo no `localStorage` |
 | CORS | ❌ Não configurado — precisa corrigir antes de integrar |
+
+```
+Teu PC (localhost)
+├── Frontend  :3000  ──→  Spring Boot :8080  ──→  Supabase (PostgreSQL ☁️)
+```
 
 ---
 
@@ -34,17 +39,63 @@ API disponível em `http://localhost:8080`
 ```bash
 # Na pasta finsight/
 npx serve -p 3000 .
-# Ou abrir as páginas direto no browser (file://)
 ```
 
-> ⚠️ Se abrir como `file://`, o browser pode bloquear fetch por política de segurança.  
-> Recomendado usar `npx serve` ou extensão Live Server do VS Code.
+> ⚠️ Não abrir como `file://` — o browser bloqueia `fetch()` por política de segurança.  
+> Sempre usar `npx serve` ou extensão Live Server do VS Code.
 
 ---
 
-## 3. ⚠️ Problemas a resolver ANTES de integrar
+## 3. Configurar Supabase
 
-### 3.1 CORS — bloqueio total das chamadas
+### 3.1 Criar o projeto
+
+1. Acessar **[supabase.com](https://supabase.com)** e criar conta (recomendado: login com GitHub)
+2. **New project** → nome `finsight`, senha forte, região `South America (São Paulo)`
+3. Aguardar ~2 min o projeto ser criado
+
+### 3.2 Pegar a connection string
+
+1. No projeto Supabase → **Settings → Database**
+2. Rolar até **Connection string → JDBC**
+3. Copiar — formato:
+```
+jdbc:postgresql://db.XXXXXXXXXXX.supabase.co:5432/postgres?user=postgres&password=SUA_SENHA
+```
+
+### 3.3 Configurar o backend
+
+**`application.properties`** — substituir tudo por:
+
+```properties
+spring.datasource.url=jdbc:postgresql://db.XXXXXXXXXXX.supabase.co:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=SUA_SENHA
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+```
+
+**`pom.xml`** — adicionar dependência do driver PostgreSQL (remover H2 se existir):
+
+```xml
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+Após isso, `./mvnw spring-boot:run` — o Hibernate cria as tabelas automaticamente no Supabase (`ddl-auto=update`).
+
+---
+
+## 4. ⚠️ Problemas a resolver ANTES de integrar
+
+### 4.1 CORS — bloqueio total das chamadas
 
 O backend não tem `@CrossOrigin` nem `CorsFilter`. Qualquer `fetch()` do frontend vai retornar:
 
@@ -68,34 +119,7 @@ public CorsFilter corsFilter() {
 }
 ```
 
----
-
-### 3.2 Banco H2 in-memory → trocar para H2 arquivo
-
-Configuração atual perde dados ao reiniciar o servidor. Trocar no `application.properties`:
-
-```properties
-# REMOVER isso:
-# spring.datasource.url=jdbc:h2:mem:testdb
-
-# ADICIONAR isso:
-spring.datasource.url=jdbc:h2:file:./data/finsight
-spring.datasource.driver-class-name=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-spring.jpa.hibernate.ddl-auto=update
-
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-```
-
-Dados ficam salvos na pasta `finsight Backend/data/finsight.mv.db`. Não perde mais ao reiniciar.
-
----
-
-### 3.3 Sem JWT — auth por `clienteId` no localStorage
+### 4.2 Sem JWT — auth por `clienteId` no localStorage
 
 Login retorna o objeto do cliente. Estratégia:
 
@@ -116,13 +140,13 @@ const clienteId = user.id;
 
 ---
 
-## 4. Endpoints — Contrato Completo
+## 5. Endpoints — Contrato Completo
 
 **Base URL:** `http://localhost:8080`
 
 ---
 
-### 4.1 Clientes (Usuário)
+### 5.1 Clientes (Usuário)
 
 #### Cadastro
 ```
@@ -144,7 +168,7 @@ POST /clientes/login
 // Request
 { "email": "joao@email.com", "senha": "minimo6" }
 
-// Response 200 — mesmo formato do cadastro
+// Response 200
 { "id": 1, "username": "João Silva", "email": "joao@email.com", "message": "..." }
 ```
 
@@ -157,16 +181,19 @@ DELETE /clientes/{id}   → 204 No Content
 
 ---
 
-### 4.2 Contas (Carteiras)
+### 5.2 Contas (Carteiras)
 
 ```
-POST   /contas          → { "clienteId": 1, "nomeBanco": "Nubank" }
+POST   /contas
 GET    /contas          → array
 GET    /contas/{id}
 DELETE /contas/{id}     → 204
 ```
 
 ```json
+// Request POST
+{ "clienteId": 1, "nomeBanco": "Nubank" }
+
 // Response
 { "idConta": 1, "nomeBanco": "Nubank", "clienteId": 1 }
 ```
@@ -175,7 +202,7 @@ DELETE /contas/{id}     → 204
 
 ---
 
-### 4.3 Transações
+### 5.3 Transações
 
 ```
 POST   /transacoes
@@ -206,7 +233,7 @@ DELETE /transacoes/{id} → 204
 
 ---
 
-### 4.4 Categorias
+### 5.4 Categorias
 
 ```
 POST   /categorias      → { "nomeCategoria": "Alimentação" }
@@ -223,7 +250,7 @@ DELETE /categorias/{id} → 204
 
 ---
 
-### 4.5 Tipos (= Metas no frontend)
+### 5.5 Tipos (= Metas no frontend)
 
 > A entidade `Tipo` no backend corresponde às **Metas** do frontend.  
 > Tem `saldoObjetivo`, `saldoAtual`, `dataLimite` — é uma meta vinculada a uma conta.
@@ -249,7 +276,7 @@ DELETE /tipos/{id}      → 204
 
 ---
 
-## 5. Mapeamento Frontend → Backend por Tela
+## 6. Mapeamento Frontend → Backend por Tela
 
 | Tela | Ação | Endpoint |
 |---|---|---|
@@ -277,7 +304,7 @@ DELETE /tipos/{id}      → 204
 
 ---
 
-## 6. O que está faltando no backend
+## 7. O que está faltando no backend
 
 | Recurso | Status | Impacto |
 |---|---|---|
@@ -289,7 +316,7 @@ DELETE /tipos/{id}      → 204
 
 ---
 
-## 7. Helper JS para chamadas à API
+## 8. Helper JS para chamadas à API
 
 Criar `js/api.js`:
 
@@ -344,16 +371,18 @@ const Clientes = {
 
 ---
 
-## 8. Checklist de integração (ordem recomendada)
+## 9. Checklist de integração (ordem recomendada)
 
-1. **[ ] Colega corrige CORS** — adicionar `CorsFilter` no `SecurityLiberadaConfig.java`
-2. **[ ] Colega troca banco** — H2 in-memory → H2 arquivo no `application.properties`
-3. **[ ] Criar `js/api.js`** no frontend
-4. **[ ] Implementar login** — `login.html` chama `POST /clientes/login`, salva no localStorage
-5. **[ ] Implementar cadastro** — `register.html` chama `POST /clientes/signup`
-6. **[ ] Guard de sessão** — verificar `finsight-session` em cada página
-7. **[ ] Ligar transações** — `transactions.html` usa `Transacoes.*`
-8. **[ ] Ligar carteiras** — `wallets.html` usa `Contas.*`
-9. **[ ] Ligar metas** — `goals.html` usa `Tipos.*`
-10. **[ ] Ligar categorias** — `categories.html` usa `Categorias.*`
-11. **[ ] Colega adicionar** `PUT /transacoes/{id}` e `PUT /contas/{id}`
+1. **[ ] Criar projeto no Supabase** — supabase.com, região São Paulo
+2. **[ ] Colega configura `application.properties`** — connection string PostgreSQL + driver
+3. **[ ] Colega corrige CORS** — adicionar `CorsFilter` no `SecurityLiberadaConfig.java`
+4. **[ ] Testar backend** — `./mvnw spring-boot:run`, tabelas devem aparecer no Supabase
+5. **[ ] Criar `js/api.js`** no frontend
+6. **[ ] Implementar login** — `login.html` chama `POST /clientes/login`, salva no localStorage
+7. **[ ] Implementar cadastro** — `register.html` chama `POST /clientes/signup`
+8. **[ ] Guard de sessão** — verificar `finsight-session` em cada página
+9. **[ ] Ligar transações** — `transactions.html` usa `Transacoes.*`
+10. **[ ] Ligar carteiras** — `wallets.html` usa `Contas.*`
+11. **[ ] Ligar metas** — `goals.html` usa `Tipos.*`
+12. **[ ] Ligar categorias** — `categories.html` usa `Categorias.*`
+13. **[ ] Colega adicionar** `PUT /transacoes/{id}` e `PUT /contas/{id}`
