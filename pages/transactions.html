@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight — Atividade</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/modals.css">
+</head>
+
+<body>
+
+  <header class="appbar">
+    <div class="appbar_brand">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      FinSight
+    </div>
+    <div class="appbar_user">
+      <div class="appbar_user_avatar">JS</div>
+      <span class="appbar_user_name">João Silva</span>
+    </div>
+    <div class="appbar_actions">
+      <button class="appbar_btn"><span class="material-symbols-outlined">tune</span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page_inner">
+
+      <div class="page_head">
+        <div>
+          <h1 class="page_title">Atividade</h1>
+          <p class="page_subtitle">Maio 2026</p>
+        </div>
+        <div class="month-nav">
+          <button class="month-nav_btn"><span class="material-symbols-outlined">chevron_left</span></button>
+          <button class="month-nav_btn"><span class="material-symbols-outlined">chevron_right</span></button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-grid">
+        <div class="summary-card income">
+          <div class="summary-card_header">
+            <span class="material-symbols-outlined icon-fill">south</span>
+            <span class="summary-card_label">Receitas</span>
+          </div>
+          <span class="summary-card_amount">R$ 8.500,00</span>
+        </div>
+        <div class="summary-card expense">
+          <div class="summary-card_header">
+            <span class="material-symbols-outlined icon-fill">north</span>
+            <span class="summary-card_label">Despesas</span>
+          </div>
+          <span class="summary-card_amount">R$ 6.219,80</span>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="search-wrap">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input type="text" class="search-input" placeholder="Buscar transações...">
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs" data-tabs="tx_filter">
+        <button class="filter-tab active" data-tab>Todas</button>
+        <button class="filter-tab" data-tab>Receitas</button>
+        <button class="filter-tab" data-tab>Despesas</button>
+        <button class="filter-tab" data-tab>Transferências</button>
+        <button class="filter-tab" data-tab>Pendentes</button>
+      </div>
+
+      <!-- Group: Hoje -->
+      <div class="tx-group">
+        <div class="tx-group_date">Hoje — 25 mai</div>
+        <div class="tx-list">
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check done" title="Efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(251,146,60,.15);color:#fb923c;">
+              <span class="material-symbols-outlined icon-fill">restaurant</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">iFood</div>
+              <div class="tx-meta">Alimentação · Nubank</div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount expense">-R$ 45,90</span>
+            </div>
+          </div>
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check" title="Marcar como efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
+              <span class="material-symbols-outlined icon-fill">directions_car</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Combustível</div>
+              <div class="tx-meta">Transporte · Carteira física <span class="tx-pill pending">Pendente</span></div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount expense pending">-R$ 180,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group: Ontem -->
+      <div class="tx-group">
+        <div class="tx-group_date">Ontem — 24 mai</div>
+        <div class="tx-list">
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check done" title="Efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
+              <span class="material-symbols-outlined icon-fill">payments</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Salário</div>
+              <div class="tx-meta">Receita · Nubank</div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount income">+R$ 5.500,00</span>
+            </div>
+          </div>
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check done" title="Efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(52,211,153,.15);color:#34d399;">
+              <span class="material-symbols-outlined icon-fill">favorite</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Farmácia</div>
+              <div class="tx-meta">Saúde · Carteira física</div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount expense">-R$ 62,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group: 22 mai -->
+      <div class="tx-group">
+        <div class="tx-group_date">22 mai</div>
+        <div class="tx-list">
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check done" title="Efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(202,190,255,.12);color:#a78bfa;">
+              <span class="material-symbols-outlined icon-fill">shopping_bag</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Amazon</div>
+              <div class="tx-meta">Compras · Nubank <span class="tx-pill parcel">3/12x</span></div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount expense">-R$ 239,90</span>
+              <span class="tx-parcel">total R$ 2.878,80</span>
+            </div>
+          </div>
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check done" title="Efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(56,189,248,.15);color:#38bdf8;">
+              <span class="material-symbols-outlined icon-fill">swap_horiz</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Nubank → Poupança</div>
+              <div class="tx-meta">Transferência</div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount transfer">R$ 500,00</span>
+            </div>
+          </div>
+          <div class="tx-row" data-modal="modal_tx_detail">
+            <button class="tx-check done" title="Efetivada"><span
+                class="material-symbols-outlined">check</span></button>
+            <div class="tx-icon" style="background:rgba(249,115,22,.15);color:#f97316;">
+              <span class="material-symbols-outlined icon-fill">sports_esports</span>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Steam</div>
+              <div class="tx-meta">Lazer · Nubank Crédito</div>
+            </div>
+            <div class="tx-right">
+              <span class="tx-amount card">-R$ 89,90</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FAB -->
+  <button class="fab" data-modal="modal_fab_type">
+    <span class="material-symbols-outlined">add</span>
+  </button>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="transactions.html" class="nav-item active">
+      <span class="material-symbols-outlined">swap_horiz</span>
+      <span>Atividade</span>
+    </a>
+    <a href="wallets.html" class="nav-item">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span>Carteiras</span>
+    </a>
+    <a href="goals.html" class="nav-item">
+      <span class="material-symbols-outlined">ads_click</span>
+      <span>Metas</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+
+  <!-- Modal: FAB type selector -->
+  <div id="modal_fab_type" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">O que deseja registrar?</h2>
+        <button class="modal-close" data-close="modal_fab_type"><span
+            class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="fab-type-grid">
+          <div class="fab-type-card expense" data-target="modal_new_expense">
+            <div class="fab-type-icon"><span class="material-symbols-outlined">arrow_upward</span></div>
+            <span class="fab-type-label">Despesa</span>
+          </div>
+          <div class="fab-type-card income" data-target="modal_new_income">
+            <div class="fab-type-icon"><span class="material-symbols-outlined">arrow_downward</span></div>
+            <span class="fab-type-label">Receita</span>
+          </div>
+          <div class="fab-type-card transfer" data-target="modal_new_transfer">
+            <div class="fab-type-icon"><span class="material-symbols-outlined">swap_horiz</span></div>
+            <span class="fab-type-label">Transferência</span>
+          </div>
+          <div class="fab-type-card card-tx" data-target="modal_new_card">
+            <div class="fab-type-icon"><span class="material-symbols-outlined">credit_card</span></div>
+            <span class="fab-type-label">Despesa de Cartão</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Nova Despesa -->
+  <div id="modal_new_expense" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Nova Despesa</h2>
+        <button class="modal-close" data-close="modal_new_expense"><span
+            class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="amount-field">
+          <div class="amount-field_label">Valor</div>
+          <div class="amount-field_wrap">
+            <span class="amount-field_currency">R$</span>
+            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <input type="text" class="form-input" placeholder="Ex: iFood, Supermercado...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-select">
+            <option>Alimentação</option>
+            <option>Transporte</option>
+            <option>Saúde</option>
+            <option>Lazer</option>
+            <option>Compras</option>
+            <option>Moradia</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Conta</label>
+          <select class="form-select">
+            <option>Conta Nubank</option>
+            <option>Poupança</option>
+            <option>Carteira física</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" class="form-input">
+        </div>
+        <label class="modal-checkbox-row">
+          <input type="checkbox" id="cb_parcel2" data-toggle-parcel="parcel_row2">
+          <span class="modal-checkbox-label">Parcelado</span>
+        </label>
+        <div id="parcel_row2" class="parcel-row" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Parcelas</label>
+            <select class="form-select">
+              <option>2x</option>
+              <option>3x</option>
+              <option>4x</option>
+              <option>5x</option>
+              <option>6x</option>
+              <option>12x</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dia venc.</label>
+            <input type="number" class="form-input" placeholder="1-31" min="1" max="31">
+          </div>
+        </div>
+        <label class="modal-checkbox-row">
+          <input type="checkbox" id="cb_fixed2" data-toggle-fixed="fixed_extra2">
+          <span class="modal-checkbox-label">Conta fixa (mensal)</span>
+        </label>
+        <div id="fixed_extra2" class="fixed-extra" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Dia do vencimento</label>
+            <input type="number" class="form-input" placeholder="Ex: 15" min="1" max="31">
+          </div>
+        </div>
+        <label class="modal-checkbox-row">
+          <input type="checkbox" checked>
+          <span class="modal-checkbox-label">Marcar como efetivada</span>
+        </label>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_expense">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Nova Receita -->
+  <div id="modal_new_income" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Nova Receita</h2>
+        <button class="modal-close" data-close="modal_new_income"><span
+            class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="amount-field">
+          <div class="amount-field_label">Valor</div>
+          <div class="amount-field_wrap">
+            <span class="amount-field_currency">R$</span>
+            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <input type="text" class="form-input" placeholder="Ex: Salário, Freelance...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-select">
+            <option>Salário</option>
+            <option>Freelance</option>
+            <option>Investimentos</option>
+            <option>Outros</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Conta</label>
+          <select class="form-select">
+            <option>Conta Nubank</option>
+            <option>Poupança</option>
+            <option>Carteira física</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" class="form-input">
+        </div>
+        <label class="modal-checkbox-row">
+          <input type="checkbox" checked>
+          <span class="modal-checkbox-label">Marcar como efetivada</span>
+        </label>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_income">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Transferência -->
+  <div id="modal_new_transfer" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Transferência</h2>
+        <button class="modal-close" data-close="modal_new_transfer"><span
+            class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="amount-field">
+          <div class="amount-field_label">Valor</div>
+          <div class="amount-field_wrap">
+            <span class="amount-field_currency">R$</span>
+            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">De</label>
+          <select class="form-select">
+            <option>Conta Nubank</option>
+            <option>Poupança</option>
+            <option>Carteira física</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Para</label>
+          <select class="form-select">
+            <option>Poupança</option>
+            <option>Conta Nubank</option>
+            <option>Carteira física</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição (opcional)</label>
+          <input type="text" class="form-input" placeholder="Ex: Reserva de emergência">
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_transfer">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Transferir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Despesa de Cartão -->
+  <div id="modal_new_card" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Despesa de Cartão</h2>
+        <button class="modal-close" data-close="modal_new_card"><span
+            class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="amount-field">
+          <div class="amount-field_label">Valor</div>
+          <div class="amount-field_wrap">
+            <span class="amount-field_currency">R$</span>
+            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <input type="text" class="form-input" placeholder="Ex: Amazon, Netflix...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cartão</label>
+          <select class="form-select">
+            <option>Nubank Crédito</option>
+            <option>Inter Mastercard</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-select">
+            <option>Alimentação</option>
+            <option>Transporte</option>
+            <option>Saúde</option>
+            <option>Lazer</option>
+            <option>Compras</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Parcelas</label>
+          <select class="form-select">
+            <option>À vista</option>
+            <option>2x</option>
+            <option>3x</option>
+            <option>4x</option>
+            <option>5x</option>
+            <option>6x</option>
+            <option>12x</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_card">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Detalhe Transação -->
+  <div id="modal_tx_detail" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-body" style="padding-top:20px;">
+        <div class="tx-detail-header">
+          <div class="tx-detail-icon-wrap" style="background:rgba(251,146,60,.15);color:#fb923c;">
+            <span class="material-symbols-outlined icon-fill">restaurant</span>
+          </div>
+          <div class="tx-detail-amount expense">-R$ 45,90</div>
+          <div class="tx-detail-name">iFood</div>
+        </div>
+        <div class="tx-detail-rows">
+          <div class="tx-detail-row">
+            <div class="tx-detail-row-icon"><span class="material-symbols-outlined">calendar_today</span></div>
+            <div class="tx-detail-row-info">
+              <span class="tx-detail-row-label">Data</span>
+              <span class="tx-detail-row-value">25 de maio de 2026</span>
+            </div>
+          </div>
+          <div class="tx-detail-row">
+            <div class="tx-detail-row-icon"><span class="material-symbols-outlined">category</span></div>
+            <div class="tx-detail-row-info">
+              <span class="tx-detail-row-label">Categoria</span>
+              <span class="tx-detail-row-value">Alimentação</span>
+            </div>
+          </div>
+          <div class="tx-detail-row">
+            <div class="tx-detail-row-icon"><span class="material-symbols-outlined">account_balance_wallet</span></div>
+            <div class="tx-detail-row-info">
+              <span class="tx-detail-row-label">Conta</span>
+              <span class="tx-detail-row-value">Conta Nubank</span>
+            </div>
+          </div>
+          <div class="tx-detail-row">
+            <div class="tx-detail-row-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            <div class="tx-detail-row-info">
+              <span class="tx-detail-row-label">Status</span>
+              <span class="tx-detail-row-value" style="color:var(--income);">Efetivada</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_tx_detail">
+            <span class="material-symbols-outlined" style="font-size:16px;">edit</span>Editar
+          </button>
+          <button class="btn-modal-danger" onclick="closeModal('modal_tx_detail');openModal('modal_confirm_delete')">
+            <span class="material-symbols-outlined" style="font-size:16px;">delete</span>Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar exclusão -->
+  <div id="modal_confirm_delete" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-body">
+        <div class="delete-confirm-wrap">
+          <span class="material-symbols-outlined delete-icon-big">delete_forever</span>
+          <h2 class="delete-confirm-title">Excluir transação?</h2>
+          <p class="delete-confirm-text">Esta ação não pode ser desfeita. A transação será removida permanentemente.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_confirm_delete">Cancelar</button>
+          <button class="btn-modal-danger">
+            <span class="material-symbols-outlined" style="font-size:16px;">delete_forever</span>Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/modals.js"></script>
+  <script src="../js/app.js"></script>
+
+</body>
+
+</html>

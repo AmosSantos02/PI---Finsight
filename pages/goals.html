@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight — Metas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/modals.css">
+</head>
+<body>
+
+  <header class="appbar">
+    <div class="appbar_brand">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      FinSight
+    </div>
+    <div class="appbar_user">
+      <div class="appbar_user_avatar">JS</div>
+      <span class="appbar_user_name">João Silva</span>
+    </div>
+    <div class="appbar_actions">
+      <button class="appbar_btn" data-modal="modal_new_goal">
+        <span class="material-symbols-outlined">add</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page_inner">
+
+      <div class="page_head">
+        <div>
+          <h1 class="page_title">Metas</h1>
+          <p class="page_subtitle">Organize seus sonhos e objetivos.</p>
+        </div>
+      </div>
+
+      <div class="filter-tabs" data-tabs="goals_filter">
+        <button class="filter-tab active" data-tab>Todas</button>
+        <button class="filter-tab" data-tab>Em andamento</button>
+        <button class="filter-tab" data-tab>Concluídas</button>
+      </div>
+
+      <div class="goal-list">
+
+        <div class="goal-card">
+          <div class="goal-card_header">
+            <div class="goal-card_left">
+              <div class="goal-card_icon" style="background:rgba(124,92,252,.15);color:#a78bfa;">
+                <span class="material-symbols-outlined">flight</span>
+              </div>
+              <div>
+                <div class="goal-card_name">Viagem Europa</div>
+                <span class="goal-card_status active">Em andamento</span>
+              </div>
+            </div>
+            <button class="goal-card_edit" data-modal="modal_edit_goal">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
+          <div class="goal-card_amounts">
+            <span class="goal-card_current">R$ 4.200</span>
+            <span class="goal-card_sep">de</span>
+            <span class="goal-card_target">R$ 15.000</span>
+          </div>
+          <div class="goal-card_pct-row"><span class="goal-card_pct">28%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:28%"></div></div>
+          <div class="goal-card_footer">
+            <button class="btn btn-secondary">
+              <span class="material-symbols-outlined">add_circle</span>Aporte
+            </button>
+            <button class="btn btn-ghost" data-modal="modal_confirm_delete_goal">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="goal-card">
+          <div class="goal-card_header">
+            <div class="goal-card_left">
+              <div class="goal-card_icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
+                <span class="material-symbols-outlined">shield</span>
+              </div>
+              <div>
+                <div class="goal-card_name">Reserva de emergência</div>
+                <span class="goal-card_status active">Em andamento</span>
+              </div>
+            </div>
+            <button class="goal-card_edit" data-modal="modal_edit_goal">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
+          <div class="goal-card_amounts">
+            <span class="goal-card_current">R$ 8.700</span>
+            <span class="goal-card_sep">de</span>
+            <span class="goal-card_target">R$ 10.000</span>
+          </div>
+          <div class="goal-card_pct-row"><span class="goal-card_pct">87%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:87%"></div></div>
+          <div class="goal-card_footer">
+            <button class="btn btn-secondary">
+              <span class="material-symbols-outlined">add_circle</span>Aporte
+            </button>
+            <button class="btn btn-ghost" data-modal="modal_confirm_delete_goal">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="goal-card">
+          <div class="goal-card_header">
+            <div class="goal-card_left">
+              <div class="goal-card_icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
+                <span class="material-symbols-outlined">laptop_mac</span>
+              </div>
+              <div>
+                <div class="goal-card_name">Notebook novo</div>
+                <span class="goal-card_status done">Concluída</span>
+              </div>
+            </div>
+            <button class="goal-card_edit" data-modal="modal_edit_goal">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
+          <div class="goal-card_amounts">
+            <span class="goal-card_current">R$ 4.500</span>
+            <span class="goal-card_sep">de</span>
+            <span class="goal-card_target">R$ 4.500</span>
+          </div>
+          <div class="goal-card_pct-row">
+            <span class="goal-card_pct" style="color:var(--income);">100%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill done" style="width:100%"></div></div>
+          <div class="goal-card_footer">
+            <button class="btn btn-secondary" disabled>
+              <span class="material-symbols-outlined">check_circle</span>Concluída
+            </button>
+            <button class="btn btn-ghost" data-modal="modal_confirm_delete_goal">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="transactions.html" class="nav-item">
+      <span class="material-symbols-outlined">swap_horiz</span>
+      <span>Atividade</span>
+    </a>
+    <a href="wallets.html" class="nav-item">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span>Carteiras</span>
+    </a>
+    <a href="goals.html" class="nav-item active">
+      <span class="material-symbols-outlined">ads_click</span>
+      <span>Metas</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+
+  <!-- Modal: Nova / Editar Meta -->
+  <div id="modal_new_goal" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Nova Meta</h2>
+        <button class="modal-close" data-close="modal_new_goal"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nome da meta</label>
+          <input type="text" class="form-input" placeholder="Ex: Viagem Europa...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor alvo</label>
+          <div class="input-wrap">
+            <span class="input-prefix">R$</span>
+            <input type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor inicial (opcional)</label>
+          <div class="input-wrap">
+            <span class="input-prefix">R$</span>
+            <input type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prazo</label>
+          <input type="date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ícone</label>
+          <div class="goal-icon-grid">
+            <div class="icon-opt selected" data-icon="flight"><span class="material-symbols-outlined">flight</span></div>
+            <div class="icon-opt" data-icon="home"><span class="material-symbols-outlined">home</span></div>
+            <div class="icon-opt" data-icon="directions_car"><span class="material-symbols-outlined">directions_car</span></div>
+            <div class="icon-opt" data-icon="laptop_mac"><span class="material-symbols-outlined">laptop_mac</span></div>
+            <div class="icon-opt" data-icon="school"><span class="material-symbols-outlined">school</span></div>
+            <div class="icon-opt" data-icon="favorite"><span class="material-symbols-outlined">favorite</span></div>
+            <div class="icon-opt" data-icon="savings"><span class="material-symbols-outlined">savings</span></div>
+            <div class="icon-opt" data-icon="shopping_bag"><span class="material-symbols-outlined">shopping_bag</span></div>
+            <div class="icon-opt" data-icon="sports_esports"><span class="material-symbols-outlined">sports_esports</span></div>
+            <div class="icon-opt" data-icon="shield"><span class="material-symbols-outlined">shield</span></div>
+            <div class="icon-opt" data-icon="restaurant"><span class="material-symbols-outlined">restaurant</span></div>
+            <div class="icon-opt" data-icon="self_improvement"><span class="material-symbols-outlined">self_improvement</span></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_goal">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>Criar meta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Meta -->
+  <div id="modal_edit_goal" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Editar Meta</h2>
+        <button class="modal-close" data-close="modal_edit_goal"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nome da meta</label>
+          <input type="text" class="form-input" value="Viagem Europa">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor alvo</label>
+          <div class="input-wrap">
+            <span class="input-prefix">R$</span>
+            <input type="text" class="form-input input-mono" value="15.000,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor atual</label>
+          <div class="input-wrap">
+            <span class="input-prefix">R$</span>
+            <input type="text" class="form-input input-mono" value="4.200,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prazo</label>
+          <input type="date" class="form-input" value="2026-12-31">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ícone</label>
+          <div class="goal-icon-grid">
+            <div class="icon-opt selected" data-icon="flight"><span class="material-symbols-outlined">flight</span></div>
+            <div class="icon-opt" data-icon="home"><span class="material-symbols-outlined">home</span></div>
+            <div class="icon-opt" data-icon="directions_car"><span class="material-symbols-outlined">directions_car</span></div>
+            <div class="icon-opt" data-icon="laptop_mac"><span class="material-symbols-outlined">laptop_mac</span></div>
+            <div class="icon-opt" data-icon="school"><span class="material-symbols-outlined">school</span></div>
+            <div class="icon-opt" data-icon="favorite"><span class="material-symbols-outlined">favorite</span></div>
+            <div class="icon-opt" data-icon="savings"><span class="material-symbols-outlined">savings</span></div>
+            <div class="icon-opt" data-icon="shopping_bag"><span class="material-symbols-outlined">shopping_bag</span></div>
+            <div class="icon-opt" data-icon="sports_esports"><span class="material-symbols-outlined">sports_esports</span></div>
+            <div class="icon-opt" data-icon="shield"><span class="material-symbols-outlined">shield</span></div>
+            <div class="icon-opt" data-icon="restaurant"><span class="material-symbols-outlined">restaurant</span></div>
+            <div class="icon-opt" data-icon="self_improvement"><span class="material-symbols-outlined">self_improvement</span></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-danger" onclick="closeModal('modal_edit_goal');openModal('modal_confirm_delete_goal')">
+            <span class="material-symbols-outlined" style="font-size:16px;">delete</span>Excluir
+          </button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar exclusão -->
+  <div id="modal_confirm_delete_goal" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-body">
+        <div class="delete-confirm-wrap">
+          <span class="material-symbols-outlined delete-icon-big">delete_forever</span>
+          <h2 class="delete-confirm-title">Excluir meta?</h2>
+          <p class="delete-confirm-text">Esta meta será excluída permanentemente e não pode ser recuperada.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_confirm_delete_goal">Cancelar</button>
+          <button class="btn-modal-danger">
+            <span class="material-symbols-outlined" style="font-size:16px;">delete_forever</span>Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/modals.js"></script>
+  <script src="../js/app.js"></script>
+
+</body>
+</html>

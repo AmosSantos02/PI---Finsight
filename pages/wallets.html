@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight — Carteiras</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/modals.css">
+</head>
+<body>
+
+  <header class="appbar">
+    <div class="appbar_brand">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      FinSight
+    </div>
+    <div class="appbar_user">
+      <div class="appbar_user_avatar">JS</div>
+      <span class="appbar_user_name">João Silva</span>
+    </div>
+    <div class="appbar_actions">
+      <button class="appbar_btn" data-modal="modal_new_wallet">
+        <span class="material-symbols-outlined">add</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page_inner">
+
+      <div class="page_head">
+        <h1 class="page_title">Carteiras</h1>
+      </div>
+
+      <!-- Total balance -->
+      <div class="balance-hero">
+        <div class="balance-hero_label">Saldo Total</div>
+        <div class="balance-hero_amount mono">R$ 13.280,50</div>
+        <div class="balance-hero_row">
+          <div class="balance-hero_month">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+            3 carteiras
+          </div>
+        </div>
+      </div>
+
+      <!-- Wallet list -->
+      <div class="wallet-list">
+
+        <div class="wallet-card">
+          <div class="wallet-card_body">
+            <div class="wallet-card_left">
+              <div class="wallet-card_icon" style="background:rgba(124,92,252,.15);color:#a78bfa;">
+                <span class="material-symbols-outlined icon-fill">account_balance</span>
+              </div>
+              <div>
+                <div class="wallet-card_name">Conta Nubank</div>
+                <div class="wallet-card_amount">R$ 4.230,50</div>
+              </div>
+            </div>
+            <span class="wallet-card_badge">Principal</span>
+          </div>
+          <div class="wallet-card_footer">
+            <a href="transactions.html" class="wallet-card_link">
+              <span class="material-symbols-outlined">visibility</span>Ver transações
+            </a>
+            <button class="wallet-card_edit" data-modal="modal_edit_wallet">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="wallet-card">
+          <div class="wallet-card_body">
+            <div class="wallet-card_left">
+              <div class="wallet-card_icon" style="background:rgba(249,115,22,.12);color:#fb923c;">
+                <span class="material-symbols-outlined icon-fill">savings</span>
+              </div>
+              <div>
+                <div class="wallet-card_name">Poupança</div>
+                <div class="wallet-card_amount">R$ 8.700,00</div>
+              </div>
+            </div>
+          </div>
+          <div class="wallet-card_footer">
+            <a href="transactions.html" class="wallet-card_link">
+              <span class="material-symbols-outlined">visibility</span>Ver transações
+            </a>
+            <button class="wallet-card_edit" data-modal="modal_edit_wallet">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="wallet-card">
+          <div class="wallet-card_body">
+            <div class="wallet-card_left">
+              <div class="wallet-card_icon" style="background:rgba(147,142,161,.1);color:#9490a8;">
+                <span class="material-symbols-outlined icon-fill">wallet</span>
+              </div>
+              <div>
+                <div class="wallet-card_name">Carteira física</div>
+                <div class="wallet-card_amount">R$ 350,00</div>
+              </div>
+            </div>
+          </div>
+          <div class="wallet-card_footer">
+            <a href="transactions.html" class="wallet-card_link">
+              <span class="material-symbols-outlined">visibility</span>Ver transações
+            </a>
+            <button class="wallet-card_edit" data-modal="modal_edit_wallet">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="transactions.html" class="nav-item">
+      <span class="material-symbols-outlined">swap_horiz</span>
+      <span>Atividade</span>
+    </a>
+    <a href="wallets.html" class="nav-item active">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span>Carteiras</span>
+    </a>
+    <a href="goals.html" class="nav-item">
+      <span class="material-symbols-outlined">ads_click</span>
+      <span>Metas</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+
+  <!-- Modal: Nova Carteira -->
+  <div id="modal_new_wallet" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Nova Carteira</h2>
+        <button class="modal-close" data-close="modal_new_wallet"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-input" placeholder="Ex: Nubank, Poupança...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Saldo inicial</label>
+          <div class="input-wrap">
+            <span class="input-prefix">R$</span>
+            <input type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-select">
+            <option>Conta corrente</option>
+            <option>Poupança</option>
+            <option>Dinheiro físico</option>
+            <option>Investimento</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cor</label>
+          <div class="wallet-color-grid">
+            <div class="wallet-color-opt selected" data-color="#7c5cfc" style="background:#7c5cfc;"></div>
+            <div class="wallet-color-opt" data-color="#22c55e" style="background:#22c55e;"></div>
+            <div class="wallet-color-opt" data-color="#f97316" style="background:#f97316;"></div>
+            <div class="wallet-color-opt" data-color="#60a5fa" style="background:#60a5fa;"></div>
+            <div class="wallet-color-opt" data-color="#ef4444" style="background:#ef4444;"></div>
+            <div class="wallet-color-opt" data-color="#34d399" style="background:#34d399;"></div>
+          </div>
+        </div>
+        <label class="modal-checkbox-row">
+          <input type="checkbox">
+          <span class="modal-checkbox-label">Definir como carteira principal</span>
+        </label>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_wallet">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">add_card</span>Criar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Carteira -->
+  <div id="modal_edit_wallet" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Editar Carteira</h2>
+        <button class="modal-close" data-close="modal_edit_wallet"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nome</label>
+          <input type="text" class="form-input" value="Conta Nubank">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-select">
+            <option selected>Conta corrente</option>
+            <option>Poupança</option>
+            <option>Dinheiro físico</option>
+            <option>Investimento</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cor</label>
+          <div class="wallet-color-grid">
+            <div class="wallet-color-opt selected" data-color="#7c5cfc" style="background:#7c5cfc;"></div>
+            <div class="wallet-color-opt" data-color="#22c55e" style="background:#22c55e;"></div>
+            <div class="wallet-color-opt" data-color="#f97316" style="background:#f97316;"></div>
+            <div class="wallet-color-opt" data-color="#60a5fa" style="background:#60a5fa;"></div>
+            <div class="wallet-color-opt" data-color="#ef4444" style="background:#ef4444;"></div>
+            <div class="wallet-color-opt" data-color="#34d399" style="background:#34d399;"></div>
+          </div>
+        </div>
+        <label class="modal-checkbox-row">
+          <input type="checkbox" checked>
+          <span class="modal-checkbox-label">Carteira principal</span>
+        </label>
+        <div class="modal-actions">
+          <button class="btn-modal-danger" onclick="closeModal('modal_edit_wallet');openModal('modal_delete_wallet')">
+            <span class="material-symbols-outlined" style="font-size:16px;">delete</span>Excluir
+          </button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar exclusão de carteira -->
+  <div id="modal_delete_wallet" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-body">
+        <div class="delete-confirm-wrap">
+          <span class="material-symbols-outlined delete-icon-big">delete_forever</span>
+          <h2 class="delete-confirm-title">Excluir carteira?</h2>
+          <p class="delete-confirm-text">Todas as transações associadas a esta carteira também serão removidas. Esta ação não pode ser desfeita.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_delete_wallet">Cancelar</button>
+          <button class="btn-modal-danger">
+            <span class="material-symbols-outlined" style="font-size:16px;">delete_forever</span>Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/modals.js"></script>
+  <script src="../js/app.js"></script>
+
+</body>
+</html>

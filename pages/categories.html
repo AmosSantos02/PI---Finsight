@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight — Categorias</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/modals.css">
+</head>
+<body>
+
+  <header class="appbar">
+    <div class="appbar_brand">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      FinSight
+    </div>
+    <div class="appbar_user">
+      <div class="appbar_user_avatar">JS</div>
+      <span class="appbar_user_name">João Silva</span>
+    </div>
+    <div class="appbar_actions">
+      <button class="appbar_btn" data-modal="modal_new_category">
+        <span class="material-symbols-outlined">add</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page_inner">
+
+      <div class="page_head">
+        <h1 class="page_title">Categorias</h1>
+      </div>
+
+      <div class="filter-tabs" data-tabs="cat_filter">
+        <button class="filter-tab active" data-tab>Todas</button>
+        <button class="filter-tab" data-tab>Receita</button>
+        <button class="filter-tab" data-tab>Despesa</button>
+      </div>
+
+      <!-- Insight -->
+      <div class="insight-card">
+        <div class="insight-card_header">
+          <span class="material-symbols-outlined icon-fill" style="color:var(--accent);font-size:20px;">insights</span>
+          <span class="insight-card_title">Insight Semanal</span>
+        </div>
+        <p class="insight-card_text">Alimentação representa <strong style="color:var(--t1);">38%</strong> dos seus gastos esta semana. Considere cozinhar mais em casa para economizar.</p>
+        <div class="insight-card_bar-row">
+          <div class="insight-card_track"><div class="insight-card_fill" style="width:38%"></div></div>
+          <span class="mono" style="font-size:.75rem;color:var(--t2);">38%</span>
+        </div>
+      </div>
+
+      <div class="category-grid">
+
+        <div class="category-card">
+          <div class="category-card_header">
+            <div class="category-card_icon" style="background:rgba(251,146,60,.15);color:#fb923c;">
+              <span class="material-symbols-outlined">restaurant</span>
+            </div>
+            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
+          </div>
+          <div>
+            <div class="category-card_name">Alimentação</div>
+            <div class="category-card_count">12 transações</div>
+          </div>
+          <div class="category-card_footer">
+            <button class="category-card_edit" data-modal="modal_new_category">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card_header">
+            <div class="category-card_icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
+              <span class="material-symbols-outlined">sports_esports</span>
+            </div>
+            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
+          </div>
+          <div>
+            <div class="category-card_name">Lazer</div>
+            <div class="category-card_count">5 transações</div>
+          </div>
+          <div class="category-card_footer">
+            <button class="category-card_edit" data-modal="modal_new_category">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card_header">
+            <div class="category-card_icon" style="background:rgba(52,211,153,.15);color:#34d399;">
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
+          </div>
+          <div>
+            <div class="category-card_name">Saúde</div>
+            <div class="category-card_count">3 transações</div>
+          </div>
+          <div class="category-card_footer">
+            <button class="category-card_edit" data-modal="modal_new_category">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card_header">
+            <div class="category-card_icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
+              <span class="material-symbols-outlined">payments</span>
+            </div>
+            <span class="category-card_badge" style="background:var(--income-dim);color:var(--income);">Receita</span>
+          </div>
+          <div>
+            <div class="category-card_name">Salário</div>
+            <div class="category-card_count">1 transação</div>
+          </div>
+          <div class="category-card_footer">
+            <button class="category-card_edit" data-modal="modal_new_category">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card_header">
+            <div class="category-card_icon" style="background:rgba(202,190,255,.12);color:#a78bfa;">
+              <span class="material-symbols-outlined">directions_car</span>
+            </div>
+            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
+          </div>
+          <div>
+            <div class="category-card_name">Transporte</div>
+            <div class="category-card_count">8 transações</div>
+          </div>
+          <div class="category-card_footer">
+            <button class="category-card_edit" data-modal="modal_new_category">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card_header">
+            <div class="category-card_icon" style="background:rgba(249,115,22,.12);color:#fb923c;">
+              <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
+            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
+          </div>
+          <div>
+            <div class="category-card_name">Compras</div>
+            <div class="category-card_count">7 transações</div>
+          </div>
+          <div class="category-card_footer">
+            <button class="category-card_edit" data-modal="modal_new_category">
+              <span class="material-symbols-outlined">edit</span>Editar
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="transactions.html" class="nav-item">
+      <span class="material-symbols-outlined">swap_horiz</span>
+      <span>Atividade</span>
+    </a>
+    <a href="wallets.html" class="nav-item">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span>Carteiras</span>
+    </a>
+    <a href="goals.html" class="nav-item">
+      <span class="material-symbols-outlined">ads_click</span>
+      <span>Metas</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+
+  <!-- Modal: Nova Categoria -->
+  <div id="modal_new_category" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Nova Categoria</h2>
+        <button class="modal-close" data-close="modal_new_category"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="type-toggle">
+          <button class="type-btn" data-type="expense">
+            <span class="material-symbols-outlined">north</span>Despesa
+          </button>
+          <button class="type-btn" data-type="income">
+            <span class="material-symbols-outlined">south</span>Receita
+          </button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nome</label>
+          <input id="cat_name" type="text" class="form-input" placeholder="Ex: Alimentação, Saúde...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ícone</label>
+          <div class="icon-grid">
+            <div class="icon-opt selected" data-icon="restaurant"><span class="material-symbols-outlined">restaurant</span></div>
+            <div class="icon-opt" data-icon="sports_esports"><span class="material-symbols-outlined">sports_esports</span></div>
+            <div class="icon-opt" data-icon="favorite"><span class="material-symbols-outlined">favorite</span></div>
+            <div class="icon-opt" data-icon="payments"><span class="material-symbols-outlined">payments</span></div>
+            <div class="icon-opt" data-icon="directions_car"><span class="material-symbols-outlined">directions_car</span></div>
+            <div class="icon-opt" data-icon="shopping_bag"><span class="material-symbols-outlined">shopping_bag</span></div>
+            <div class="icon-opt" data-icon="home"><span class="material-symbols-outlined">home</span></div>
+            <div class="icon-opt" data-icon="school"><span class="material-symbols-outlined">school</span></div>
+            <div class="icon-opt" data-icon="flight"><span class="material-symbols-outlined">flight</span></div>
+            <div class="icon-opt" data-icon="local_hospital"><span class="material-symbols-outlined">local_hospital</span></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cor</label>
+          <div class="color-grid">
+            <div class="color-opt selected" data-color="#7c5cfc" style="background:#7c5cfc;"></div>
+            <div class="color-opt" data-color="#22c55e" style="background:#22c55e;"></div>
+            <div class="color-opt" data-color="#fb923c" style="background:#fb923c;"></div>
+            <div class="color-opt" data-color="#60a5fa" style="background:#60a5fa;"></div>
+            <div class="color-opt" data-color="#f87171" style="background:#f87171;"></div>
+            <div class="color-opt" data-color="#34d399" style="background:#34d399;"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pré-visualização</label>
+          <div class="cat-preview">
+            <div id="preview_box" class="cat-preview-icon-box" style="background:rgba(124,92,252,.15);">
+              <span id="preview_icon" class="material-symbols-outlined" style="color:#7c5cfc;">restaurant</span>
+            </div>
+            <div>
+              <div id="preview_name" class="cat-preview-name">Nome da categoria</div>
+              <span id="preview_badge" class="cat-preview-badge">Despesa</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_new_category">Cancelar</button>
+          <button class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>Criar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/modals.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

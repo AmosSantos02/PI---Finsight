@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight — Criar Conta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/modals.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-inner">
+    <div class="auth-brand">
+      <div class="auth-brand_icon">
+        <span class="material-symbols-outlined">account_balance_wallet</span>
+      </div>
+      <div>
+        <div class="auth-brand_name">FinSight</div>
+        <div class="auth-brand_tagline">Wealth Intelligence</div>
+      </div>
+    </div>
+
+    <h1 class="auth-heading">Crie sua conta</h1>
+    <p class="auth-subheading">Comece sua jornada para a clareza financeira hoje mesmo.</p>
+
+    <form class="auth-form" onsubmit="return false;">
+      <div class="auth-field">
+        <label class="auth-field_label" for="reg_name">Nome completo</label>
+        <div class="auth-field_wrap">
+          <span class="material-symbols-outlined auth-field_icon">person</span>
+          <input id="reg_name" type="text" class="auth-field_input" placeholder="Ex: João Silva" autocomplete="name">
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-field_label" for="reg_email">E-mail</label>
+        <div class="auth-field_wrap">
+          <span class="material-symbols-outlined auth-field_icon">alternate_email</span>
+          <input id="reg_email" type="email" class="auth-field_input" placeholder="nome@exemplo.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-field_label" for="reg_password">Senha</label>
+        <div class="auth-field_wrap">
+          <span class="material-symbols-outlined auth-field_icon">lock</span>
+          <input id="reg_password" type="password" class="auth-field_input" placeholder="••••••••" autocomplete="new-password">
+          <button type="button" data-pw-toggle="reg_password" class="auth-field_action">
+            <span class="material-symbols-outlined">visibility</span>
+          </button>
+        </div>
+        <div class="strength-bars">
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+        </div>
+        <span id="strength_label" class="strength-label"></span>
+      </div>
+
+      <div class="auth-field">
+        <label class="auth-field_label" for="reg_confirm">Confirmar senha</label>
+        <div class="auth-field_wrap">
+          <span class="material-symbols-outlined auth-field_icon">shield_lock</span>
+          <input id="reg_confirm" type="password" class="auth-field_input" placeholder="••••••••" autocomplete="new-password">
+        </div>
+      </div>
+
+      <label class="auth-terms">
+        <input type="checkbox">
+        <span class="auth-terms_text">
+          Aceito os <a href="#" class="auth-terms_link">Termos de Uso</a> e <a href="#" class="auth-terms_link">Política de Privacidade</a>.
+        </span>
+      </label>
+
+      <button type="submit" class="auth-btn">
+        <span>Criar conta</span>
+        <span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>
+      </button>
+
+      <div class="auth-divider">
+        <div class="auth-divider_line"></div>
+        <span class="auth-divider_text">Ou registre com</span>
+        <div class="auth-divider_line"></div>
+      </div>
+
+      <div class="auth-social">
+        <button type="button" class="auth-social_btn">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          <span>Google</span>
+        </button>
+        <button type="button" class="auth-social_btn">
+          <span class="material-symbols-outlined" style="font-size:18px;">phone_iphone</span>
+          <span>Apple</span>
+        </button>
+      </div>
+    </form>
+
+    <p class="auth-footer">
+      Já tem conta? <a href="login.html" class="auth-link">Entrar</a>
+    </p>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script src="../js/modals.js"></script>
+</body>
+</html>

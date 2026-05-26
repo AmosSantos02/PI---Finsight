@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSight — Relatórios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/modals.css">
+</head>
+<body>
+
+  <header class="appbar">
+    <div class="appbar_brand">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      FinSight
+    </div>
+    <div class="appbar_user">
+      <div class="appbar_user_avatar">JS</div>
+      <span class="appbar_user_name">João Silva</span>
+    </div>
+    <div class="appbar_actions">
+      <button class="appbar_btn" data-modal="modal_report_filters">
+        <span class="material-symbols-outlined">tune</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page_inner">
+
+      <div class="page_head">
+        <div>
+          <h1 class="page_title">Relatórios</h1>
+          <p class="page_subtitle">Maio 2026</p>
+        </div>
+      </div>
+
+      <!-- Period tabs -->
+      <div class="filter-tabs" data-tabs="report_period">
+        <button class="filter-tab active" data-tab>Mês</button>
+        <button class="filter-tab" data-tab>Trimestre</button>
+        <button class="filter-tab" data-tab>Ano</button>
+        <button class="filter-tab" data-tab>Personalizado</button>
+      </div>
+
+      <!-- Summary cards -->
+      <div class="report-summary">
+        <div class="summary-card income">
+          <div class="summary-card_header">
+            <span class="material-symbols-outlined icon-fill">south</span>
+            <span class="summary-card_label">Receitas</span>
+          </div>
+          <span class="summary-card_amount">R$ 8.500,00</span>
+        </div>
+        <div class="summary-card expense">
+          <div class="summary-card_header">
+            <span class="material-symbols-outlined icon-fill">north</span>
+            <span class="summary-card_label">Despesas</span>
+          </div>
+          <span class="summary-card_amount">R$ 6.219,80</span>
+        </div>
+      </div>
+
+      <!-- Balance result -->
+      <div class="balance-hero" style="margin-bottom:14px;">
+        <div class="balance-hero_label">Saldo do período</div>
+        <div class="balance-hero_amount mono" style="color:var(--income);">+R$ 2.280,20</div>
+        <div class="balance-hero_row">
+          <div class="balance-hero_badge">
+            <span class="material-symbols-outlined icon-fill" style="font-size:13px;">trending_up</span>
+            Receitas superiores às despesas
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-card">
+        <div class="chart-title">Evolução mensal</div>
+        <div class="chart-bars">
+          <div class="chart-col">
+            <div class="chart-bar income" style="height:60%"></div>
+            <span class="chart-day">JAN</span>
+          </div>
+          <div class="chart-col">
+            <div class="chart-bar expense" style="height:45%"></div>
+            <span class="chart-day">FEV</span>
+          </div>
+          <div class="chart-col">
+            <div class="chart-bar income" style="height:75%"></div>
+            <span class="chart-day">MAR</span>
+          </div>
+          <div class="chart-col">
+            <div class="chart-bar expense" style="height:55%"></div>
+            <span class="chart-day">ABR</span>
+          </div>
+          <div class="chart-col">
+            <div class="chart-bar income" style="height:90%"></div>
+            <span class="chart-day">MAI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- By category -->
+      <div class="section-header">
+        <span class="section-title">Por categoria</span>
+      </div>
+
+      <div class="report-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(251,146,60,.15);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#fb923c;">restaurant</span>
+          </div>
+          <span class="report-row_label">Alimentação</span>
+        </div>
+        <span class="report-row_value" style="color:var(--expense);">R$ 2.360,00</span>
+      </div>
+      <div class="report-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(202,190,255,.12);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#a78bfa;">directions_car</span>
+          </div>
+          <span class="report-row_label">Transporte</span>
+        </div>
+        <span class="report-row_value" style="color:var(--expense);">R$ 1.440,00</span>
+      </div>
+      <div class="report-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,.15);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#60a5fa;">sports_esports</span>
+          </div>
+          <span class="report-row_label">Lazer</span>
+        </div>
+        <span class="report-row_value" style="color:var(--expense);">R$ 839,90</span>
+      </div>
+      <div class="report-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#34d399;">favorite</span>
+          </div>
+          <span class="report-row_label">Saúde</span>
+        </div>
+        <span class="report-row_value" style="color:var(--expense);">R$ 620,00</span>
+      </div>
+      <div class="report-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#22c55e;">payments</span>
+          </div>
+          <span class="report-row_label">Salário</span>
+        </div>
+        <span class="report-row_value" style="color:var(--income);">+R$ 5.500,00</span>
+      </div>
+
+      <!-- Export -->
+      <button class="btn-export">
+        <span class="material-symbols-outlined">download</span>
+        Exportar relatório (CSV)
+      </button>
+
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Dashboard</span>
+    </a>
+    <a href="transactions.html" class="nav-item">
+      <span class="material-symbols-outlined">swap_horiz</span>
+      <span>Atividade</span>
+    </a>
+    <a href="wallets.html" class="nav-item">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span>Carteiras</span>
+    </a>
+    <a href="goals.html" class="nav-item">
+      <span class="material-symbols-outlined">ads_click</span>
+      <span>Metas</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+
+  <!-- Modal: Filtros do relatório -->
+  <div id="modal_report_filters" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Filtros</h2>
+        <button class="modal-close" data-close="modal_report_filters"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Período</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label class="form-label">De</label>
+              <input type="date" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Até</label>
+              <input type="date" class="form-input">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-select">
+            <option>Todas</option>
+            <option>Receitas</option>
+            <option>Despesas</option>
+            <option>Transferências</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-select">
+            <option>Todas as categorias</option>
+            <option>Alimentação</option>
+            <option>Transporte</option>
+            <option>Saúde</option>
+            <option>Lazer</option>
+            <option>Salário</option>
+            <option>Compras</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Conta</label>
+          <select class="form-select">
+            <option>Todas as contas</option>
+            <option>Conta Nubank</option>
+            <option>Poupança</option>
+            <option>Carteira física</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal-cancel" data-close="modal_report_filters">Limpar</button>
+          <button class="btn-modal-primary" data-close="modal_report_filters">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Aplicar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/modals.js"></script>
+  <script src="../js/app.js"></script>
+
+</body>
+</html>
