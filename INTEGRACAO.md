@@ -5,29 +5,55 @@
 
 ---
 
-## 1. Stack do Backend
+## 1. Stack definida
 
 | Item | Detalhe |
 |---|---|
-| Framework | Spring Boot |
-| Banco atual | H2 in-memory (`jdbc:h2:mem:testdb`) |
-| Porta padrão | `http://localhost:8080` |
-| Autenticação | Nenhuma (todas as rotas abertas via `SecurityLiberadaConfig`) |
-| CORS | **Não configurado** — chamadas do frontend vão falhar |
+| Framework backend | Spring Boot |
+| Banco de dados | H2 arquivo local (persiste entre reinicializações) |
+| Frontend | HTML/CSS/JS vanilla |
+| Ambiente | **100% local** — tudo roda na mesma máquina |
+| URL do backend | `http://localhost:8080` |
+| URL do frontend | `http://localhost:3000` (ou abrir HTML direto no browser) |
+| Autenticação | Sem JWT — `clienteId` salvo no `localStorage` |
+| CORS | ❌ Não configurado — precisa corrigir antes de integrar |
 
 ---
 
-## 2. ⚠️ Problemas a resolver ANTES de integrar
+## 2. Como rodar localmente
 
-### 2.1 CORS — bloqueio total das chamadas
+### Backend (Spring Boot)
+```bash
+# Na pasta "finsight Backend"
+./mvnw spring-boot:run
+# Ou pelo Eclipse/IntelliJ: rodar FinsightApplication.java
+```
+API disponível em `http://localhost:8080`
 
-O backend não tem `@CrossOrigin` nem `CorsFilter`. Qualquer `fetch()` do frontend vai retornar erro:
+### Frontend
+```bash
+# Na pasta finsight/
+npx serve -p 3000 .
+# Ou abrir as páginas direto no browser (file://)
+```
+
+> ⚠️ Se abrir como `file://`, o browser pode bloquear fetch por política de segurança.  
+> Recomendado usar `npx serve` ou extensão Live Server do VS Code.
+
+---
+
+## 3. ⚠️ Problemas a resolver ANTES de integrar
+
+### 3.1 CORS — bloqueio total das chamadas
+
+O backend não tem `@CrossOrigin` nem `CorsFilter`. Qualquer `fetch()` do frontend vai retornar:
 
 ```
-Access to fetch at 'http://localhost:8080/...' from origin 'http://localhost:3000' has been blocked by CORS policy
+Access to fetch at 'http://localhost:8080/...' from origin 'http://localhost:3000'
+has been blocked by CORS policy
 ```
 
-**Fix no backend** — adicionar no `SecurityLiberadaConfig.java`:
+**Fix no backend** — adicionar em `SecurityLiberadaConfig.java`:
 
 ```java
 @Bean
@@ -44,179 +70,122 @@ public CorsFilter corsFilter() {
 
 ---
 
-### 2.2 Banco de dados — H2 in-memory perde dados ao reiniciar
+### 3.2 Banco H2 in-memory → trocar para H2 arquivo
 
-Configuração atual: `jdbc:h2:mem:testdb` — cada reinicialização do servidor apaga tudo.
+Configuração atual perde dados ao reiniciar o servidor. Trocar no `application.properties`:
 
-**Opções:**
-
-| Opção | Como fazer | Custo |
-|---|---|---|
-| H2 arquivo (mais simples) | Trocar URL no `application.properties` | Grátis, local |
-| PostgreSQL local | Instalar PostgreSQL + mudar driver | Grátis, local |
-| **Supabase** (recomendado) | Criar projeto em supabase.com, pegar connection string | Grátis (500MB) |
-
-**Para H2 arquivo** (solução mais rápida, sem instalar nada):
 ```properties
-# application.properties
+# REMOVER isso:
+# spring.datasource.url=jdbc:h2:mem:testdb
+
+# ADICIONAR isso:
 spring.datasource.url=jdbc:h2:file:./data/finsight
 spring.datasource.driver-class-name=org.h2.Driver
-```
+spring.datasource.username=sa
+spring.datasource.password=
 
-**Para Supabase (PostgreSQL na nuvem)**:
-1. Criar conta em [supabase.com](https://supabase.com)
-2. Criar novo projeto
-3. Ir em `Settings → Database → Connection String → JDBC`
-4. Copiar a string e colar no `application.properties`:
-
-```properties
-spring.datasource.url=jdbc:postgresql://db.PROJETO.supabase.co:5432/postgres
-spring.datasource.username=postgres
-spring.datasource.password=SUA_SENHA
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.jpa.hibernate.ddl-auto=update
+
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
 ```
 
-E adicionar no `pom.xml`:
-```xml
-<dependency>
-    <groupId>org.postgresql</groupId>
-    <artifactId>postgresql</artifactId>
-    <scope>runtime</scope>
-</dependency>
-```
+Dados ficam salvos na pasta `finsight Backend/data/finsight.mv.db`. Não perde mais ao reiniciar.
 
 ---
 
-### 2.3 Sem JWT — autenticação por `clienteId` no localStorage
+### 3.3 Sem JWT — auth por `clienteId` no localStorage
 
-O login retorna apenas o objeto do cliente. Não há token. A estratégia é:
+Login retorna o objeto do cliente. Estratégia:
 
-1. Salvar resposta do login no `localStorage`:
 ```js
-localStorage.setItem('finsight-user', JSON.stringify(response));
-// response = { id, username, email, message }
-```
+// Após login bem-sucedido:
+localStorage.setItem('finsight-user', JSON.stringify({ id, username, email }));
+localStorage.setItem('finsight-session', 'true');
 
-2. Em toda requisição que precise de `clienteId`, ler:
-```js
+// Em cada página, verificar se está logado:
+if (!localStorage.getItem('finsight-session')) {
+  window.location.href = 'login.html';
+}
+
+// Para requisições que precisam do clienteId:
 const user = JSON.parse(localStorage.getItem('finsight-user'));
 const clienteId = user.id;
 ```
 
 ---
 
-## 3. Endpoints — Contrato Completo
+## 4. Endpoints — Contrato Completo
 
 **Base URL:** `http://localhost:8080`
 
 ---
 
-### 3.1 Clientes (Usuário)
+### 4.1 Clientes (Usuário)
 
 #### Cadastro
 ```
 POST /clientes/signup
 ```
-**Request:**
 ```json
-{
-  "username": "João Silva",
-  "email": "joao@email.com",
-  "senha": "minimo6"
-}
-```
-**Response 201:**
-```json
-{
-  "id": 1,
-  "username": "João Silva",
-  "email": "joao@email.com",
-  "message": "..."
-}
+// Request
+{ "username": "João Silva", "email": "joao@email.com", "senha": "minimo6" }
+
+// Response 201
+{ "id": 1, "username": "João Silva", "email": "joao@email.com", "message": "..." }
 ```
 
 #### Login
 ```
 POST /clientes/login
 ```
-**Request:**
 ```json
-{
-  "email": "joao@email.com",
-  "senha": "minimo6"
-}
-```
-**Response 200:** mesmo formato do cadastro
+// Request
+{ "email": "joao@email.com", "senha": "minimo6" }
 
-#### Buscar cliente
-```
-GET /clientes/{id}
+// Response 200 — mesmo formato do cadastro
+{ "id": 1, "username": "João Silva", "email": "joao@email.com", "message": "..." }
 ```
 
-#### Atualizar cliente
+#### Buscar / Atualizar / Deletar
 ```
-PUT /clientes/{id}
-```
-**Request:** mesmo body do cadastro
-
-#### Deletar cliente
-```
+GET    /clientes/{id}
+PUT    /clientes/{id}   → body igual ao cadastro
 DELETE /clientes/{id}   → 204 No Content
 ```
 
 ---
 
-### 3.2 Contas (Carteiras)
+### 4.2 Contas (Carteiras)
 
-#### Criar conta
 ```
-POST /contas
+POST   /contas          → { "clienteId": 1, "nomeBanco": "Nubank" }
+GET    /contas          → array
+GET    /contas/{id}
+DELETE /contas/{id}     → 204
 ```
-**Request:**
+
 ```json
-{
-  "clienteId": 1,
-  "nomeBanco": "Nubank"
-}
-```
-**Response 201:**
-```json
-{
-  "idConta": 1,
-  "nomeBanco": "Nubank",
-  "clienteId": 1
-}
+// Response
+{ "idConta": 1, "nomeBanco": "Nubank", "clienteId": 1 }
 ```
 
-#### Listar contas
-```
-GET /contas   → array de ContaResponseDTO
-```
-
-#### Buscar conta
-```
-GET /contas/{id}
-```
-
-#### Deletar conta
-```
-DELETE /contas/{id}   → 204
-```
-
-> ⚠️ **Falta `PUT /contas/{id}`** — não há endpoint para editar nome da conta.
+> ⚠️ Falta `PUT /contas/{id}` — pedir ao colega adicionar.
 
 ---
 
-### 3.3 Transações
+### 4.3 Transações
 
-#### Criar transação
 ```
-POST /transacoes
+POST   /transacoes
+GET    /transacoes      → array
+GET    /transacoes/{id}
+DELETE /transacoes/{id} → 204
 ```
-**Request:**
+
 ```json
+// Request POST
 {
   "titulo": "Mercado",
   "descricao": "Compras da semana",
@@ -231,99 +200,44 @@ POST /transacoes
 }
 ```
 
-> `debitoCredito`: `true` = débito/despesa, `false` = crédito/receita  
-> `efetividade`: `true` = efetivada, `false` = pendente (RF03)  
-> `tipoId`: referencia a entidade `Tipo` — ver seção 3.5
-
-**Response 201:**
-```json
-{
-  "idTransacao": 10,
-  "titulo": "Mercado",
-  "valor": 150.00,
-  "dataTransacao": "2026-05-26",
-  "descricao": "Compras da semana",
-  "quantidadeParcelas": 1,
-  "debitoCredito": true,
-  "efetividade": true,
-  "dataEfetividade": "2026-05-26",
-  "categoriaId": 2,
-  "tipoId": 1
-}
-```
-
-#### Listar transações
-```
-GET /transacoes   → array
-```
-
-#### Buscar transação
-```
-GET /transacoes/{id}
-```
-
-#### Deletar transação
-```
-DELETE /transacoes/{id}   → 204
-```
-
-> ⚠️ **Falta `PUT /transacoes/{id}`** — não há edição de transação.
+> `debitoCredito`: `true` = despesa, `false` = receita  
+> `efetividade`: `true` = efetivada, `false` = pendente  
+> ⚠️ Falta `PUT /transacoes/{id}` — pedir ao colega adicionar.
 
 ---
 
-### 3.4 Categorias
+### 4.4 Categorias
 
-#### Criar
 ```
-POST /categorias
+POST   /categorias      → { "nomeCategoria": "Alimentação" }
+GET    /categorias      → array
+GET    /categorias/{id}
+PUT    /categorias/{id} → { "nomeCategoria": "Novo nome" }
+DELETE /categorias/{id} → 204
 ```
-**Request:**
+
 ```json
-{
-  "nomeCategoria": "Alimentação"
-}
-```
-**Response 201:**
-```json
-{
-  "idCategoria": 1,
-  "nomeCategoria": "Alimentação"
-}
-```
-
-#### Listar
-```
-GET /categorias
-```
-
-#### Buscar
-```
-GET /categorias/{id}
-```
-
-#### Atualizar
-```
-PUT /categorias/{id}
-```
-**Request:** mesmo body do criar
-
-#### Deletar
-```
-DELETE /categorias/{id}   → 204
+// Response
+{ "idCategoria": 1, "nomeCategoria": "Alimentação" }
 ```
 
 ---
 
-### 3.5 Tipos (= Metas no frontend)
+### 4.5 Tipos (= Metas no frontend)
 
-> ⚠️ A entidade `Tipo` no backend corresponde às **Metas** do frontend (tem `saldoObjetivo`, `saldoAtual`, `dataLimite`). O nome é diferente mas a função é a mesma.
+> A entidade `Tipo` no backend corresponde às **Metas** do frontend.  
+> Tem `saldoObjetivo`, `saldoAtual`, `dataLimite` — é uma meta vinculada a uma conta.
 
-#### Criar
 ```
-POST /tipos
+POST   /tipos
+GET    /tipos           → array
+GET    /tipos/{id}
+PUT    /tipos/{id}
+DELETE /tipos/{id}      → 204
 ```
-**Request:**
+
 ```json
+// Request POST
 {
   "nome": "Viagem Europa",
   "saldoObjetivo": 15000.00,
@@ -333,29 +247,9 @@ POST /tipos
 }
 ```
 
-#### Listar
-```
-GET /tipos
-```
-
-#### Buscar
-```
-GET /tipos/{id}
-```
-
-#### Atualizar
-```
-PUT /tipos/{id}
-```
-
-#### Deletar
-```
-DELETE /tipos/{id}   → 204
-```
-
 ---
 
-## 4. Mapeamento Frontend → Backend por Tela
+## 5. Mapeamento Frontend → Backend por Tela
 
 | Tela | Ação | Endpoint |
 |---|---|---|
@@ -363,7 +257,7 @@ DELETE /tipos/{id}   → 204
 | `register.html` | Criar conta | `POST /clientes/signup` |
 | `dashboard.html` | Listar transações recentes | `GET /transacoes` |
 | `dashboard.html` | Listar metas | `GET /tipos` |
-| `transactions.html` | Listar todas transações | `GET /transacoes` |
+| `transactions.html` | Listar transações | `GET /transacoes` |
 | `transactions.html` | Nova transação | `POST /transacoes` |
 | `transactions.html` | Excluir transação | `DELETE /transacoes/{id}` |
 | `wallets.html` | Listar carteiras | `GET /contas` |
@@ -383,37 +277,21 @@ DELETE /tipos/{id}   → 204
 
 ---
 
-## 5. O que está faltando no backend
+## 6. O que está faltando no backend
 
 | Recurso | Status | Impacto |
 |---|---|---|
 | `PUT /transacoes/{id}` | ❌ Ausente | Não é possível editar transação |
 | `PUT /contas/{id}` | ❌ Ausente | Não é possível editar carteira |
 | Transação vinculada a Conta | ❌ Ausente | Não sabe em qual carteira a transação foi feita |
-| Filtro de transações por cliente | ❌ Ausente | `GET /transacoes` retorna todas, não filtra por usuário |
-| Filtro de contas por cliente | ❌ Ausente | `GET /contas` retorna todas |
+| Filtro por cliente | ❌ Ausente | `GET /transacoes` e `GET /contas` retornam registros de todos os usuários |
 | CORS | ❌ Ausente | Frontend não consegue chamar a API |
-
----
-
-## 6. Fluxo de Auth recomendado (sem JWT)
-
-```
-1. Usuário faz login → POST /clientes/login
-2. Resposta: { id, username, email }
-3. Salvar no localStorage:
-   localStorage.setItem('finsight-user', JSON.stringify({ id, username, email }))
-   localStorage.setItem('finsight-session', 'true')
-4. Redirecionar para dashboard.html
-5. Em cada página: verificar se 'finsight-session' existe, senão redirecionar para login.html
-6. Para requisições: ler clienteId do localStorage quando necessário
-```
 
 ---
 
 ## 7. Helper JS para chamadas à API
 
-Criar `js/api.js` com funções reutilizáveis:
+Criar `js/api.js`:
 
 ```js
 const API = 'http://localhost:8080';
@@ -428,44 +306,39 @@ async function apiFetch(path, options = {}) {
   return res.json();
 }
 
-// Transações
 const Transacoes = {
-  listar: ()           => apiFetch('/transacoes'),
-  buscar: (id)         => apiFetch(`/transacoes/${id}`),
-  criar:  (body)       => apiFetch('/transacoes', { method: 'POST', body: JSON.stringify(body) }),
-  deletar:(id)         => apiFetch(`/transacoes/${id}`, { method: 'DELETE' }),
+  listar:  ()          => apiFetch('/transacoes'),
+  buscar:  (id)        => apiFetch(`/transacoes/${id}`),
+  criar:   (body)      => apiFetch('/transacoes', { method: 'POST', body: JSON.stringify(body) }),
+  deletar: (id)        => apiFetch(`/transacoes/${id}`, { method: 'DELETE' }),
 };
 
-// Contas
 const Contas = {
-  listar: ()           => apiFetch('/contas'),
-  criar:  (body)       => apiFetch('/contas', { method: 'POST', body: JSON.stringify(body) }),
-  deletar:(id)         => apiFetch(`/contas/${id}`, { method: 'DELETE' }),
+  listar:  ()          => apiFetch('/contas'),
+  criar:   (body)      => apiFetch('/contas', { method: 'POST', body: JSON.stringify(body) }),
+  deletar: (id)        => apiFetch(`/contas/${id}`, { method: 'DELETE' }),
 };
 
-// Categorias
 const Categorias = {
-  listar: ()           => apiFetch('/categorias'),
-  criar:  (body)       => apiFetch('/categorias', { method: 'POST', body: JSON.stringify(body) }),
+  listar:    ()        => apiFetch('/categorias'),
+  criar:     (body)    => apiFetch('/categorias', { method: 'POST', body: JSON.stringify(body) }),
   atualizar: (id,body) => apiFetch(`/categorias/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
-  deletar:(id)         => apiFetch(`/categorias/${id}`, { method: 'DELETE' }),
+  deletar:   (id)      => apiFetch(`/categorias/${id}`, { method: 'DELETE' }),
 };
 
-// Tipos (= Metas)
 const Tipos = {
-  listar: ()           => apiFetch('/tipos'),
-  criar:  (body)       => apiFetch('/tipos', { method: 'POST', body: JSON.stringify(body) }),
+  listar:    ()        => apiFetch('/tipos'),
+  criar:     (body)    => apiFetch('/tipos', { method: 'POST', body: JSON.stringify(body) }),
   atualizar: (id,body) => apiFetch(`/tipos/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
-  deletar:(id)         => apiFetch(`/tipos/${id}`, { method: 'DELETE' }),
+  deletar:   (id)      => apiFetch(`/tipos/${id}`, { method: 'DELETE' }),
 };
 
-// Clientes (Auth)
 const Clientes = {
-  login:    (body)     => apiFetch('/clientes/login',  { method: 'POST', body: JSON.stringify(body) }),
-  cadastrar:(body)     => apiFetch('/clientes/signup', { method: 'POST', body: JSON.stringify(body) }),
-  buscar:   (id)       => apiFetch(`/clientes/${id}`),
-  atualizar:(id,body)  => apiFetch(`/clientes/${id}`,  { method: 'PUT', body: JSON.stringify(body) }),
-  deletar:  (id)       => apiFetch(`/clientes/${id}`,  { method: 'DELETE' }),
+  login:     (body)    => apiFetch('/clientes/login',  { method: 'POST', body: JSON.stringify(body) }),
+  cadastrar: (body)    => apiFetch('/clientes/signup', { method: 'POST', body: JSON.stringify(body) }),
+  buscar:    (id)      => apiFetch(`/clientes/${id}`),
+  atualizar: (id,body) => apiFetch(`/clientes/${id}`,  { method: 'PUT', body: JSON.stringify(body) }),
+  deletar:   (id)      => apiFetch(`/clientes/${id}`,  { method: 'DELETE' }),
 };
 ```
 
@@ -473,13 +346,14 @@ const Clientes = {
 
 ## 8. Checklist de integração (ordem recomendada)
 
-1. **[ ] Resolver CORS** — adicionar `CorsFilter` no backend
-2. **[ ] Escolher banco** — H2 arquivo (simples) ou Supabase (cloud)
+1. **[ ] Colega corrige CORS** — adicionar `CorsFilter` no `SecurityLiberadaConfig.java`
+2. **[ ] Colega troca banco** — H2 in-memory → H2 arquivo no `application.properties`
 3. **[ ] Criar `js/api.js`** no frontend
-4. **[ ] Implementar login/cadastro** — `login.html` + `register.html`
-5. **[ ] Implementar guard de sessão** — verificar `finsight-session` em cada página
-6. **[ ] Ligar transações** — `transactions.html` usa `Transacoes.listar()` e `Transacoes.criar()`
-7. **[ ] Ligar carteiras** — `wallets.html` usa `Contas.*`
-8. **[ ] Ligar metas** — `goals.html` usa `Tipos.*`
-9. **[ ] Ligar categorias** — `categories.html` usa `Categorias.*`
-10. **[ ] Pedir colega adicionar** `PUT /transacoes/{id}` e `PUT /contas/{id}`
+4. **[ ] Implementar login** — `login.html` chama `POST /clientes/login`, salva no localStorage
+5. **[ ] Implementar cadastro** — `register.html` chama `POST /clientes/signup`
+6. **[ ] Guard de sessão** — verificar `finsight-session` em cada página
+7. **[ ] Ligar transações** — `transactions.html` usa `Transacoes.*`
+8. **[ ] Ligar carteiras** — `wallets.html` usa `Contas.*`
+9. **[ ] Ligar metas** — `goals.html` usa `Tipos.*`
+10. **[ ] Ligar categorias** — `categories.html` usa `Categorias.*`
+11. **[ ] Colega adicionar** `PUT /transacoes/{id}` e `PUT /contas/{id}`
