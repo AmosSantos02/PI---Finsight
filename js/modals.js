@@ -258,8 +258,10 @@ function initAppbarUser() {
     const raw = localStorage.getItem('finsight-user');
     if (!raw) return;
     const user = JSON.parse(raw);
-    const name = user.nome || '';
-    const initials = user.iniciais || name.split(' ').map(w => w[0]).filter(Boolean).slice(0,2).join('').toUpperCase() || '?';
+    const name = user.nome || user.username || '';
+    const initials = user.iniciais
+      || name.split(' ').map(w => w[0]).filter(Boolean).slice(0,2).join('').toUpperCase()
+      || '?';
     document.querySelectorAll('.appbar_user_name').forEach(el => { el.textContent = name; });
     document.querySelectorAll('.appbar_user_avatar').forEach(el => { el.textContent = initials; });
   } catch (_) {}

@@ -829,10 +829,23 @@ body.modal-open { overflow:hidden; }
 }
 
 /* ══════════════════════════════════════
-   APPBAR USER (desktop only)
+   APPBAR USER
 ══════════════════════════════════════ */
+
+/* Avatar link — mobile/tablet (inside appbar_actions) */
+.appbar_avatar-btn {
+  display:flex; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:50%;
+  text-decoration:none; flex-shrink:0;
+  transition:opacity .15s;
+}
+.appbar_avatar-btn:hover { opacity:.8; }
+/* hidden on desktop — appbar_user already shows there */
+body.has-sidebar .appbar_avatar-btn { display:none; }
+
+/* User block — desktop only (left side of appbar, replaces brand) */
 .appbar_user {
-  display:none; /* hidden on mobile — shown by media query above */
+  display:none;
   align-items:center; gap:10px;
 }
 .appbar_user_avatar {
