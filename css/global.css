@@ -156,7 +156,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 clamp(12px, 4vw, 16px);
   background: rgba(14, 12, 23, .92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -214,15 +214,16 @@ html:not(.dark) .appbar {
 ══════════════════════════════════════ */
 .page {
   padding-top: var(--topbar-h);
-  padding-bottom: calc(var(--bottomnav-h) + 16px);
+  padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px) + 16px);
   min-height: 100dvh;
 }
 
 .page_inner {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 20px 16px;
   width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .page_head {
@@ -255,12 +256,12 @@ html:not(.dark) .appbar {
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--bottomnav-h);
-  z-index: 100;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 4px 4px;
+  height: calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px));
+  padding: 0 4px env(safe-area-inset-bottom, 0px);
   background: var(--nav-bg);
   border-top: 1px solid var(--nav-border);
 }
@@ -281,7 +282,7 @@ html:not(.dark) .appbar {
   color: var(--t3);
   text-decoration: none;
   transition: color .15s;
-  min-height: 44px;
+  min-height: 48px;
 }
 
 .nav-item .material-symbols-outlined {
@@ -299,18 +300,26 @@ html:not(.dark) .appbar {
 /* ══════════════════════════════════════
    DESKTOP SIDEBAR
 ══════════════════════════════════════ */
+/* ─── Sidebar mini (padrão) + expande no hover ─── */
 #sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: var(--sidebar-w);
+  width: 64px;
   height: 100dvh;
   z-index: 110;
   display: flex;
   flex-direction: column;
   background: var(--s0);
   border-right: 1px solid var(--b1);
-  padding: 0 10px 20px;
+  padding: 0 8px 20px;
+  overflow: hidden;
+  transition: width .25s cubic-bezier(.4,0,.2,1),
+              box-shadow .25s;
+}
+#sidebar:hover {
+  width: var(--sidebar-w);
+  box-shadow: var(--sh-lg);
 }
 
 .sidebar_top {
@@ -318,7 +327,7 @@ html:not(.dark) .appbar {
   align-items: center;
   gap: 10px;
   height: var(--topbar-h);
-  padding: 0 10px;
+  padding: 0 6px;
   border-bottom: 1px solid var(--b2);
   margin-bottom: 10px;
   font-size: 1.0625rem;
@@ -326,13 +335,23 @@ html:not(.dark) .appbar {
   letter-spacing: -.03em;
   color: var(--t1);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .sidebar_top .material-symbols-outlined {
   font-size: 22px;
   color: var(--accent);
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  flex-shrink: 0;
 }
+
+.sidebar_brand_name {
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .2s .05s;
+}
+#sidebar:hover .sidebar_brand_name { opacity: 1; }
 
 .sidebar_nav {
   flex: 1;
@@ -340,25 +359,34 @@ html:not(.dark) .appbar {
   flex-direction: column;
   gap: 2px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar_link {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 10px;
   border-radius: var(--r-md);
   font-size: .875rem;
   font-weight: 600;
   color: var(--t2);
   text-decoration: none;
   transition: background .15s, color .15s;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sidebar_link .material-symbols-outlined {
   font-size: 20px;
   flex-shrink: 0;
 }
+
+.sidebar_link_label {
+  opacity: 0;
+  transition: opacity .15s .05s;
+}
+#sidebar:hover .sidebar_link_label { opacity: 1; }
 
 .sidebar_link:hover {
   background: var(--s2);
@@ -375,11 +403,16 @@ html:not(.dark) .appbar {
 }
 
 .sidebar_footer {
-  padding: 10px 12px 0;
+  padding: 10px 6px 0;
   border-top: 1px solid var(--b2);
   font-size: .6875rem;
   color: var(--t3);
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .15s;
 }
+#sidebar:hover .sidebar_footer { opacity: 1; }
 
 /* ══════════════════════════════════════
    ALERT BANNER (RF04)
@@ -2555,32 +2588,28 @@ body.modal-open {
    Desktop: >= 1024px
 ══════════════════════════════════════ */
 
+/* ══════════════════════════════════════
+   MOBILE — base styles (todos os celulares)
+   Appbar e bottom-nav sempre full-width
+   e fixos. Nenhum translateX, nenhum
+   max-width neles aqui.
+══════════════════════════════════════ */
+
+/* Garante full-width em qualquer celular */
+.appbar,
+.bottom-nav {
+  left: 0;
+  right: 0;
+  max-width: 100%;
+  transform: none;
+  border-radius: 0;
+}
+
+/* ─── Tablet ≥ 600px ─── */
 @media (min-width: 600px) {
   .page_inner {
-    max-width: 680px;
-    padding: 24px 28px;
-  }
-
-  .appbar,
-  .bottom-nav {
-    max-width: 680px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
-
-  .appbar {
-    border-radius: 0 0 var(--r-lg) var(--r-lg);
-  }
-
-  .bottom-nav {
-    border-radius: var(--r-2xl) var(--r-2xl) 0 0;
-    border: 1px solid var(--nav-border);
-    border-bottom: none;
-  }
-
-  .fab {
-    right: calc(50% - 340px + 16px);
+    max-width: 640px;
+    padding: 20px 24px;
   }
 
   .wallet-list {
@@ -2600,42 +2629,46 @@ body.modal-open {
   }
 
   .stats-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .summary-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .report-summary {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .balance-hero_amount {
-    font-size: 2.125rem;
+    font-size: 2rem;
   }
 
   .page_title {
-    font-size: 1.875rem;
+    font-size: 1.75rem;
   }
 }
 
+/* ─── Desktop ≥ 1024px ─── */
 @media (min-width: 1024px) {
   body.has-sidebar {
-    padding-left: var(--sidebar-w);
+    padding-left: 64px;
   }
 
+  /* Bottom nav some — sidebar substitui */
   body.has-sidebar .bottom-nav {
     display: none !important;
   }
 
+  /* Appbar se ajusta à sidebar */
   body.has-sidebar .appbar {
-    left: var(--sidebar-w);
+    left: 64px;
     right: 0;
     max-width: none;
     width: auto;
     transform: none;
     border-radius: 0;
+    border-bottom: 1px solid var(--b2);
   }
 
   body.has-sidebar .page_inner {
@@ -2656,6 +2689,10 @@ body.modal-open {
     padding: 0;
   }
 
+  body.has-sidebar .page {
+    padding-bottom: 32px;
+  }
+
   .page_title {
     font-size: 2.125rem;
   }
@@ -2668,25 +2705,44 @@ body.modal-open {
     font-size: 2.75rem;
   }
 
-  .total-balance-card {
-    padding: 26px 30px;
-  }
-
-  .total-balance_amount {
-    font-size: 2.125rem;
-  }
-
   .chart-bars {
     height: 96px;
   }
 
-  /* Desktop: hide duplicate logo, show user info */
   body.has-sidebar .appbar_brand {
     display: none;
   }
 
   body.has-sidebar .appbar_user {
     display: flex;
+  }
+
+  .wallet-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .goal-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .report-summary {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

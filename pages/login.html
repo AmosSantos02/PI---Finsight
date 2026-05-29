@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -78,8 +78,50 @@
     </p>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    // Redireciona se já estiver logado
+    if (localStorage.getItem('finsight-session') === 'true') {
+      window.location.replace('dashboard.html');
+    }
+
+    document.querySelector('.auth-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn   = this.querySelector('.auth-btn');
+      const email = document.getElementById('login_email').value.trim();
+      const pass  = document.getElementById('login_password').value;
+
+      if (!email || !pass) return showAuthError('Preencha todos os campos.');
+
+      btn.disabled = true;
+      btn.textContent = 'Entrando…';
+
+      try {
+        const user = await dbLogin(email, pass);
+        localStorage.setItem('finsight-user',    JSON.stringify(user));
+        localStorage.setItem('finsight-session', 'true');
+        window.location.replace('dashboard.html');
+      } catch (err) {
+        showAuthError(err.message || 'Erro ao entrar. Tente novamente.');
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+
+    function showAuthError(msg) {
+      let el = document.getElementById('auth-error');
+      if (!el) {
+        el = document.createElement('p');
+        el.id = 'auth-error';
+        el.style.cssText = 'color:var(--clr-expense);font-size:.85rem;margin-top:-.5rem;text-align:center';
+        document.querySelector('.auth-btn').insertAdjacentElement('beforebegin', el);
+      }
+      el.textContent = msg;
+    }
+  </script>
 
 </body>
 </html>

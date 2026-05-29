@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="../css/modals.css">
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <header class="appbar">
     <div class="appbar_brand">
@@ -21,9 +26,6 @@
       <span class="appbar_user_name">João Silva</span>
     </div>
     <div class="appbar_actions">
-      <button class="appbar_btn" data-modal="modal_new_wallet">
-        <span class="material-symbols-outlined">add</span>
-      </button>
       <a href="profile.html" class="appbar_avatar-btn">
         <div class="appbar_user_avatar">JS</div>
       </a>
@@ -49,77 +51,26 @@
         </div>
       </div>
 
-      <!-- Wallet list -->
-      <div class="wallet-list">
-
-        <div class="wallet-card">
-          <div class="wallet-card_body">
-            <div class="wallet-card_left">
-              <div class="wallet-card_icon" style="background:rgba(124,92,252,.15);color:#a78bfa;">
-                <span class="material-symbols-outlined icon-fill">account_balance</span>
-              </div>
-              <div>
-                <div class="wallet-card_name">Conta Nubank</div>
-                <div class="wallet-card_amount">R$ 4.230,50</div>
-              </div>
-            </div>
-            <span class="wallet-card_badge">Principal</span>
-          </div>
-          <div class="wallet-card_footer">
-            <a href="transactions.html" class="wallet-card_link">
-              <span class="material-symbols-outlined">visibility</span>Ver transações
-            </a>
-            <button class="wallet-card_edit" data-modal="modal_edit_wallet">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
+      <!-- Adicionar carteira inline -->
+      <div class="wallet-add-card">
+        <div class="wallet-add-card_title" style="display:flex;align-items:center;gap:6px;">
+          <span class="material-symbols-outlined">add_card</span>
+          Nova carteira
+        </div>
+        <div class="wallet-add-card_fields" style="display:flex;flex-direction:column;gap:10px;">
+          <input id="wallet_nome" type="text" class="form-input" placeholder="Nome (ex: Nubank, Poupança...)">
+          <div class="input-wrap">
+            <span class="input-prefix">R$</span>
+            <input id="wallet_saldo" type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
-
-        <div class="wallet-card">
-          <div class="wallet-card_body">
-            <div class="wallet-card_left">
-              <div class="wallet-card_icon" style="background:rgba(249,115,22,.12);color:#fb923c;">
-                <span class="material-symbols-outlined icon-fill">savings</span>
-              </div>
-              <div>
-                <div class="wallet-card_name">Poupança</div>
-                <div class="wallet-card_amount">R$ 8.700,00</div>
-              </div>
-            </div>
-          </div>
-          <div class="wallet-card_footer">
-            <a href="transactions.html" class="wallet-card_link">
-              <span class="material-symbols-outlined">visibility</span>Ver transações
-            </a>
-            <button class="wallet-card_edit" data-modal="modal_edit_wallet">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-        <div class="wallet-card">
-          <div class="wallet-card_body">
-            <div class="wallet-card_left">
-              <div class="wallet-card_icon" style="background:rgba(147,142,161,.1);color:#9490a8;">
-                <span class="material-symbols-outlined icon-fill">wallet</span>
-              </div>
-              <div>
-                <div class="wallet-card_name">Carteira física</div>
-                <div class="wallet-card_amount">R$ 350,00</div>
-              </div>
-            </div>
-          </div>
-          <div class="wallet-card_footer">
-            <a href="transactions.html" class="wallet-card_link">
-              <span class="material-symbols-outlined">visibility</span>Ver transações
-            </a>
-            <button class="wallet-card_edit" data-modal="modal_edit_wallet">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
+        <button id="btn_criar_wallet" class="btn btn-primary" style="width:100%;margin-top:8px;">
+          <span class="material-symbols-outlined">add</span>Adicionar carteira
+        </button>
       </div>
+
+      <!-- Wallet list -->
+      <div class="wallet-list" id="wallet_list" style="margin-top:20px;"></div>
 
     </div>
   </main>
@@ -159,13 +110,13 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Nome</label>
-          <input type="text" class="form-input" placeholder="Ex: Nubank, Poupança...">
+          <input id="wallet_nome" type="text" class="form-input" placeholder="Ex: Nubank, Poupança...">
         </div>
         <div class="form-group">
           <label class="form-label">Saldo inicial</label>
           <div class="input-wrap">
             <span class="input-prefix">R$</span>
-            <input type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
+            <input id="wallet_saldo" type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
@@ -194,7 +145,7 @@
         </label>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_wallet">Cancelar</button>
-          <button class="btn-modal-primary">
+          <button id="btn_criar_wallet" class="btn-modal-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">add_card</span>Criar
           </button>
         </div>
@@ -271,8 +222,112 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    const _wUser = JSON.parse(localStorage.getItem('finsight-user') || '{}');
+    const WALLET_COLORS = ['#7c5cfc','#22c55e','#f97316','#60a5fa','#ef4444','#34d399'];
+    const WALLET_ICONS  = ['account_balance','savings','wallet','credit_card','home','payments'];
+
+    function fmtBRL(v) {
+      return Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function renderWallets(contas) {
+      const list = document.getElementById('wallet_list');
+      const hero_amount = document.querySelector('.balance-hero_amount');
+      const hero_count  = document.querySelector('.balance-hero_month');
+
+      if (!contas.length) {
+        list.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:32px 0;">Nenhuma carteira cadastrada.</p>';
+        hero_amount.textContent = 'R$ 0,00';
+        hero_count.innerHTML = '<span class="material-symbols-outlined">account_balance_wallet</span> 0 carteiras';
+        return;
+      }
+
+      let totalSaldo = 0;
+      list.innerHTML = contas.map((c, i) => {
+        const tipo   = getTipoPadrao(c);
+        const saldo  = parseFloat(tipo?.saldo_atual || 0);
+        const color  = WALLET_COLORS[i % WALLET_COLORS.length];
+        const icon   = WALLET_ICONS[i % WALLET_ICONS.length];
+        totalSaldo += saldo;
+        return `
+          <div class="wallet-card">
+            <div class="wallet-card_body">
+              <div class="wallet-card_left">
+                <div class="wallet-card_icon" style="background:${color}22;color:${color};">
+                  <span class="material-symbols-outlined icon-fill">${icon}</span>
+                </div>
+                <div>
+                  <div class="wallet-card_name">${c.nome_banco}</div>
+                  <div class="wallet-card_amount">R$ ${fmtBRL(saldo)}</div>
+                </div>
+              </div>
+            </div>
+            <div class="wallet-card_footer">
+              <a href="transactions.html" class="wallet-card_link">
+                <span class="material-symbols-outlined">visibility</span>Ver transações
+              </a>
+              <button class="wallet-card_edit" onclick="confirmarExcluirWallet(${c.id_conta}, '${c.nome_banco.replace(/'/g,"\\'")}')">
+                <span class="material-symbols-outlined">delete</span>Excluir
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+
+      hero_amount.textContent = 'R$ ' + fmtBRL(totalSaldo);
+      hero_count.innerHTML = `<span class="material-symbols-outlined">account_balance_wallet</span> ${contas.length} carteira${contas.length !== 1 ? 's' : ''}`;
+    }
+
+    async function carregarWallets() {
+      const contas = await dbGetContas(_wUser.id_cliente);
+      renderWallets(contas);
+    }
+
+    async function confirmarExcluirWallet(id_conta, nome) {
+      if (!confirm(`Excluir a carteira "${nome}"? Todas as transações associadas serão removidas.`)) return;
+      try {
+        await dbDeleteConta(id_conta);
+        await carregarWallets();
+      } catch(e) {
+        alert('Erro ao excluir: ' + e.message);
+      }
+    }
+
+    document.getElementById('btn_criar_wallet').addEventListener('click', async function () {
+      const nome  = document.getElementById('wallet_nome').value.trim();
+      const saldo = parseFloat(document.getElementById('wallet_saldo').value.replace(',', '.')) || 0;
+      if (!nome) { alert('Informe um nome para a carteira.'); return; }
+
+      this.disabled = true;
+      this.textContent = 'Criando…';
+      try {
+        await dbAddContaComSaldo(_wUser.id_cliente, nome, saldo);
+        document.getElementById('wallet_nome').value  = '';
+        document.getElementById('wallet_saldo').value = '';
+        await carregarWallets();
+      } catch(e) {
+        alert('Erro ao criar carteira: ' + e.message);
+      } finally {
+        this.disabled = false;
+        this.innerHTML = '<span class="material-symbols-outlined">add</span>Adicionar carteira';
+      }
+    });
+
+    // Preenche avatar na appbar
+    if (_wUser.username) {
+      document.querySelectorAll('.appbar_user_avatar').forEach(el => {
+        el.textContent = _wUser.username.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      });
+      const nameEl = document.querySelector('.appbar_user_name');
+      if (nameEl) nameEl.textContent = _wUser.username;
+    }
+
+    carregarWallets();
+  </script>
 
 </body>
 </html>

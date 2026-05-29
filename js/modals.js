@@ -48,13 +48,13 @@ function buildSidebarHTML() {
     const active = path.endsWith(item.href) || path.includes(item.href.replace('.html', ''));
     return `<a href="${item.href}" class="sidebar_link${active ? ' active' : ''}">
       <span class="material-symbols-outlined">${item.icon}</span>
-      <span>${item.label}</span>
+      <span class="sidebar_link_label">${item.label}</span>
     </a>`;
   }).join('');
   return `
     <div class="sidebar_top">
       <span class="material-symbols-outlined">account_balance_wallet</span>
-      FinSight
+      <span class="sidebar_brand_name">FinSight</span>
     </div>
     <nav class="sidebar_nav">${linksHTML}</nav>
     <div class="sidebar_footer">v2.0.0</div>
@@ -265,6 +265,25 @@ function initAppbarUser() {
     document.querySelectorAll('.appbar_user_name').forEach(el => { el.textContent = name; });
     document.querySelectorAll('.appbar_user_avatar').forEach(el => { el.textContent = initials; });
   } catch (_) {}
+
+  // Injeta botão de tema no appbar_actions (todas as páginas)
+  const actions = document.querySelector('.appbar_actions');
+  if (actions && !document.getElementById('appbar_theme_btn')) {
+    const isDark = document.documentElement.classList.contains('dark');
+    const btn = document.createElement('button');
+    btn.id = 'appbar_theme_btn';
+    btn.className = 'appbar_btn';
+    btn.title = isDark ? 'Modo claro' : 'Modo escuro';
+    btn.innerHTML = `<span class="material-symbols-outlined">${isDark ? 'light_mode' : 'dark_mode'}</span>`;
+    btn.addEventListener('click', () => {
+      toggleDarkMode();
+      const nowDark = document.documentElement.classList.contains('dark');
+      btn.title = nowDark ? 'Modo claro' : 'Modo escuro';
+      btn.querySelector('.material-symbols-outlined').textContent = nowDark ? 'light_mode' : 'dark_mode';
+    });
+    // Insere antes do avatar (último filho)
+    actions.insertBefore(btn, actions.lastElementChild);
+  }
 }
 
 /* ─── Category Preview ─── */

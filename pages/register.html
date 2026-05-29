@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -102,7 +102,73 @@
     </p>
   </div>
 
-  <script src="../js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    if (localStorage.getItem('finsight-session') === 'true') {
+      window.location.replace('dashboard.html');
+    }
+
+    // Força de senha
+    document.getElementById('reg_password').addEventListener('input', function () {
+      const v = this.value;
+      const bars  = document.querySelectorAll('.strength-bar');
+      const label = document.getElementById('strength_label');
+      let score = 0;
+      if (v.length >= 8) score++;
+      if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+      if (/\d/.test(v) && /[^A-Za-z0-9]/.test(v)) score++;
+      const levels = [
+        { color: 'var(--clr-expense)', text: 'Fraca' },
+        { color: '#f59e0b',            text: 'Média' },
+        { color: 'var(--clr-income)',  text: 'Forte' },
+      ];
+      bars.forEach((b, i) => {
+        b.style.background = i < score ? levels[score - 1].color : 'var(--clr-outline)';
+      });
+      label.textContent = v.length ? levels[score - 1]?.text ?? '' : '';
+      label.style.color = score ? levels[score - 1].color : '';
+    });
+
+    document.querySelector('.auth-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn      = this.querySelector('.auth-btn');
+      const username = document.getElementById('reg_name').value.trim();
+      const email    = document.getElementById('reg_email').value.trim();
+      const pass     = document.getElementById('reg_password').value;
+      const confirm  = document.getElementById('reg_confirm').value;
+      const terms    = this.querySelector('input[type=checkbox]').checked;
+
+      if (!username || !email || !pass || !confirm) return showAuthError('Preencha todos os campos.');
+      if (pass !== confirm)   return showAuthError('As senhas não coincidem.');
+      if (!terms)             return showAuthError('Aceite os termos para continuar.');
+
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Criando conta…';
+
+      try {
+        await dbRegister(username, email, pass);
+        window.location.replace('login.html');
+      } catch (err) {
+        const msg = err.code === '23505' ? 'Este e-mail já está cadastrado.' : (err.message || 'Erro ao criar conta.');
+        showAuthError(msg);
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Criar conta';
+      }
+    });
+
+    function showAuthError(msg) {
+      let el = document.getElementById('auth-error');
+      if (!el) {
+        el = document.createElement('p');
+        el.id = 'auth-error';
+        el.style.cssText = 'color:var(--clr-expense);font-size:.85rem;margin-top:-.5rem;text-align:center';
+        document.querySelector('.auth-btn').insertAdjacentElement('beforebegin', el);
+      }
+      el.textContent = msg;
+    }
+  </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="../css/modals.css">
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <header class="appbar">
     <div class="appbar_brand">
@@ -55,109 +60,43 @@
             <span class="material-symbols-outlined icon-fill">south</span>
             <span class="summary-card_label">Receitas</span>
           </div>
-          <span class="summary-card_amount">R$ 8.500,00</span>
+          <span id="rep_receitas" class="summary-card_amount">R$ —</span>
         </div>
         <div class="summary-card expense">
           <div class="summary-card_header">
             <span class="material-symbols-outlined icon-fill">north</span>
             <span class="summary-card_label">Despesas</span>
           </div>
-          <span class="summary-card_amount">R$ 6.219,80</span>
+          <span id="rep_despesas" class="summary-card_amount">R$ —</span>
         </div>
       </div>
 
       <!-- Balance result -->
       <div class="balance-hero" style="margin-bottom:14px;">
         <div class="balance-hero_label">Saldo do período</div>
-        <div class="balance-hero_amount mono" style="color:var(--income);">+R$ 2.280,20</div>
+        <div id="rep_saldo" class="balance-hero_amount mono">R$ —</div>
         <div class="balance-hero_row">
-          <div class="balance-hero_badge">
-            <span class="material-symbols-outlined icon-fill" style="font-size:13px;">trending_up</span>
-            Receitas superiores às despesas
+          <div id="rep_badge" class="balance-hero_badge" style="display:none;">
+            <span class="material-symbols-outlined icon-fill" style="font-size:13px;" id="rep_badge_icon">trending_up</span>
+            <span id="rep_badge_txt"></span>
           </div>
         </div>
       </div>
 
       <!-- Chart -->
       <div class="chart-card">
-        <div class="chart-title">Evolução mensal</div>
-        <div class="chart-bars">
-          <div class="chart-col">
-            <div class="chart-bar income" style="height:60%"></div>
-            <span class="chart-day">JAN</span>
-          </div>
-          <div class="chart-col">
-            <div class="chart-bar expense" style="height:45%"></div>
-            <span class="chart-day">FEV</span>
-          </div>
-          <div class="chart-col">
-            <div class="chart-bar income" style="height:75%"></div>
-            <span class="chart-day">MAR</span>
-          </div>
-          <div class="chart-col">
-            <div class="chart-bar expense" style="height:55%"></div>
-            <span class="chart-day">ABR</span>
-          </div>
-          <div class="chart-col">
-            <div class="chart-bar income" style="height:90%"></div>
-            <span class="chart-day">MAI</span>
-          </div>
-        </div>
+        <div id="rep_chart_title" class="chart-title">Evolução</div>
+        <div id="rep_chart_bars" class="chart-bars"></div>
       </div>
 
       <!-- By category -->
       <div class="section-header">
         <span class="section-title">Por categoria</span>
       </div>
-
-      <div class="report-row">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(251,146,60,.15);display:flex;align-items:center;justify-content:center;">
-            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#fb923c;">restaurant</span>
-          </div>
-          <span class="report-row_label">Alimentação</span>
-        </div>
-        <span class="report-row_value" style="color:var(--expense);">R$ 2.360,00</span>
-      </div>
-      <div class="report-row">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(202,190,255,.12);display:flex;align-items:center;justify-content:center;">
-            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#a78bfa;">directions_car</span>
-          </div>
-          <span class="report-row_label">Transporte</span>
-        </div>
-        <span class="report-row_value" style="color:var(--expense);">R$ 1.440,00</span>
-      </div>
-      <div class="report-row">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(96,165,250,.15);display:flex;align-items:center;justify-content:center;">
-            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#60a5fa;">sports_esports</span>
-          </div>
-          <span class="report-row_label">Lazer</span>
-        </div>
-        <span class="report-row_value" style="color:var(--expense);">R$ 839,90</span>
-      </div>
-      <div class="report-row">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;">
-            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#34d399;">favorite</span>
-          </div>
-          <span class="report-row_label">Saúde</span>
-        </div>
-        <span class="report-row_value" style="color:var(--expense);">R$ 620,00</span>
-      </div>
-      <div class="report-row">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.15);display:flex;align-items:center;justify-content:center;">
-            <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:#22c55e;">payments</span>
-          </div>
-          <span class="report-row_label">Salário</span>
-        </div>
-        <span class="report-row_value" style="color:var(--income);">+R$ 5.500,00</span>
-      </div>
+      <div id="rep_categorias"></div>
 
       <!-- Export -->
-      <button class="btn-export">
+      <button id="btn_export_csv" class="btn-export">
         <span class="material-symbols-outlined">download</span>
         Exportar relatório (CSV)
       </button>
@@ -199,51 +138,37 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label">Período</label>
+          <label class="form-label">Período personalizado</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
             <div>
               <label class="form-label">De</label>
-              <input type="date" class="form-input">
+              <input id="filter_de" type="date" class="form-input">
             </div>
             <div>
               <label class="form-label">Até</label>
-              <input type="date" class="form-input">
+              <input id="filter_ate" type="date" class="form-input">
             </div>
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Tipo</label>
-          <select class="form-select">
-            <option>Todas</option>
-            <option>Receitas</option>
-            <option>Despesas</option>
-            <option>Transferências</option>
+          <select id="filter_tipo" class="form-select">
+            <option value="todas">Todas</option>
+            <option value="income">Receitas</option>
+            <option value="expense">Despesas</option>
           </select>
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-select">
-            <option>Todas as categorias</option>
-            <option>Alimentação</option>
-            <option>Transporte</option>
-            <option>Saúde</option>
-            <option>Lazer</option>
-            <option>Salário</option>
-            <option>Compras</option>
-          </select>
+          <select id="filter_categoria" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Conta</label>
-          <select class="form-select">
-            <option>Todas as contas</option>
-            <option>Conta Nubank</option>
-            <option>Poupança</option>
-            <option>Carteira física</option>
-          </select>
+          <select id="filter_conta" class="form-select"></select>
         </div>
         <div class="modal-actions">
-          <button class="btn-modal-cancel" data-close="modal_report_filters">Limpar</button>
-          <button class="btn-modal-primary" data-close="modal_report_filters">
+          <button id="btn_limpar_filtros" class="btn-modal-cancel">Limpar</button>
+          <button id="btn_aplicar_filtros" class="btn-modal-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">check</span>Aplicar
           </button>
         </div>
@@ -251,8 +176,330 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    const _rUser = JSON.parse(localStorage.getItem('finsight-user') || '{}');
+
+    let _allTx   = [];
+    let _allCats = [];
+    let _allContas = [];
+    let _periodo = 'mes';  // mes | trimestre | ano | personalizado
+    let _filtros = { tipo: 'todas', id_categoria: 'todas', id_tipo: 'todas', de: null, ate: null };
+
+    function fmtBRL(v) { return Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+    function parseCat(raw) { try { return JSON.parse(raw); } catch { return { nome: raw, icone: 'category', cor: '#7c5cfc' }; } }
+
+    // ─── Intervalo por período ───
+    function getIntervalo() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm   = now.getMonth();
+
+      if (_periodo === 'mes') {
+        return { de: `${yyyy}-${String(mm+1).padStart(2,'0')}-01`, ate: now.toISOString().slice(0,10) };
+      }
+      if (_periodo === 'trimestre') {
+        const d3 = new Date(now); d3.setMonth(mm - 2); d3.setDate(1);
+        return { de: d3.toISOString().slice(0,10), ate: now.toISOString().slice(0,10) };
+      }
+      if (_periodo === 'ano') {
+        return { de: `${yyyy}-01-01`, ate: now.toISOString().slice(0,10) };
+      }
+      if (_periodo === 'personalizado') {
+        return { de: _filtros.de, ate: _filtros.ate };
+      }
+    }
+
+    // ─── Filtra transações ───
+    function txFiltradas() {
+      const { de, ate } = getIntervalo() || {};
+      return _allTx.filter(tx => {
+        const d = tx.data_transacao || '';
+        if (de  && d < de)  return false;
+        if (ate && d > ate) return false;
+        if (_filtros.tipo !== 'todas') {
+          if (_filtros.tipo === 'income'  && !tx.debitocredito)  return false;
+          if (_filtros.tipo === 'expense' && tx.debitocredito)   return false;
+        }
+        if (_filtros.id_categoria !== 'todas' && tx.id_categoria !== parseInt(_filtros.id_categoria)) return false;
+        if (_filtros.id_tipo      !== 'todas' && tx.id_tipo      !== parseInt(_filtros.id_tipo))      return false;
+        return true;
+      });
+    }
+
+    // ─── Render ───
+    function renderRelatorio() {
+      const txs = txFiltradas();
+      const { de, ate } = getIntervalo() || {};
+
+      // Atualiza subtítulo
+      const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+      const now = new Date();
+      const subtitulos = {
+        mes: `${meses[now.getMonth()]} ${now.getFullYear()}`,
+        trimestre: 'Últimos 3 meses',
+        ano: `Ano ${now.getFullYear()}`,
+        personalizado: de && ate ? `${de.split('-').reverse().join('/')} → ${ate.split('-').reverse().join('/')}` : 'Personalizado'
+      };
+      document.querySelector('.page_subtitle').textContent = subtitulos[_periodo];
+
+      // Totais
+      let receitas = 0, despesas = 0;
+      txs.forEach(tx => {
+        if (tx.debitocredito) receitas += parseFloat(tx.valor);
+        else despesas += parseFloat(tx.valor);
+      });
+      const saldo = receitas - despesas;
+
+      document.getElementById('rep_receitas').textContent = 'R$ ' + fmtBRL(receitas);
+      document.getElementById('rep_despesas').textContent = 'R$ ' + fmtBRL(despesas);
+      document.getElementById('rep_saldo').textContent    = (saldo >= 0 ? '+' : '') + 'R$ ' + fmtBRL(Math.abs(saldo));
+      document.getElementById('rep_saldo').style.color    = saldo >= 0 ? 'var(--clr-income)' : 'var(--clr-expense)';
+
+      const badge = document.getElementById('rep_badge');
+      if (receitas > 0 || despesas > 0) {
+        badge.style.display = '';
+        document.getElementById('rep_badge_icon').textContent = saldo >= 0 ? 'trending_up' : 'trending_down';
+        document.getElementById('rep_badge_txt').textContent  = saldo >= 0 ? 'Receitas superiores às despesas' : 'Despesas superiores às receitas';
+        badge.style.color = saldo >= 0 ? 'var(--clr-income)' : 'var(--clr-expense)';
+      } else {
+        badge.style.display = 'none';
+      }
+
+      // Gráfico
+      renderGrafico(txs);
+
+      // Por categoria
+      renderCategorias(txs);
+    }
+
+    // ─── Gráfico ───
+    function renderGrafico(txs) {
+      const barsEl  = document.getElementById('rep_chart_bars');
+      const titleEl = document.getElementById('rep_chart_title');
+      const now = new Date();
+      const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+      let buckets = [];
+
+      if (_periodo === 'mes') {
+        // Dias da semana da semana atual (últimos 7 dias)
+        titleEl.textContent = 'Gastos dos últimos 7 dias';
+        buckets = Array.from({length:7}, (_,i) => {
+          const d = new Date(Date.now() - (6-i)*86400000);
+          const iso = d.toISOString().slice(0,10);
+          const dia = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d.getDay()];
+          return { label: dia, de: iso, ate: iso };
+        });
+      } else if (_periodo === 'trimestre') {
+        titleEl.textContent = 'Últimos 3 meses';
+        buckets = [0,1,2].map(i => {
+          const d = new Date(now.getFullYear(), now.getMonth() - (2-i), 1);
+          const fim = new Date(now.getFullYear(), now.getMonth() - (2-i) + 1, 0);
+          return {
+            label: meses[d.getMonth()],
+            de: d.toISOString().slice(0,10),
+            ate: fim.toISOString().slice(0,10)
+          };
+        });
+      } else if (_periodo === 'ano') {
+        titleEl.textContent = `Meses de ${now.getFullYear()}`;
+        buckets = Array.from({length: now.getMonth()+1}, (_,i) => {
+          const fim = new Date(now.getFullYear(), i+1, 0);
+          return {
+            label: meses[i],
+            de: `${now.getFullYear()}-${String(i+1).padStart(2,'0')}-01`,
+            ate: fim.toISOString().slice(0,10)
+          };
+        });
+      } else {
+        titleEl.textContent = 'Período personalizado';
+        const { de, ate } = getIntervalo() || {};
+        if (!de || !ate) { barsEl.innerHTML = '<p style="color:var(--clr-on-surface-variant);font-size:.85rem;">Selecione um período nos filtros.</p>'; return; }
+        // Divide o intervalo em até 8 partes
+        const deDt = new Date(de), ateDt = new Date(ate);
+        const diffDays = Math.ceil((ateDt - deDt) / 86400000);
+        const step = Math.ceil(diffDays / 8) || 1;
+        let cur = new Date(deDt);
+        while (cur <= ateDt) {
+          const next = new Date(cur); next.setDate(next.getDate() + step - 1);
+          const fim = next > ateDt ? ateDt : next;
+          buckets.push({ label: `${cur.getDate()}/${cur.getMonth()+1}`, de: cur.toISOString().slice(0,10), ate: fim.toISOString().slice(0,10) });
+          cur = new Date(fim); cur.setDate(cur.getDate() + 1);
+        }
+      }
+
+      const maxVal = Math.max(1, ...buckets.map(b =>
+        txs.filter(tx => tx.data_transacao >= b.de && tx.data_transacao <= b.ate)
+           .reduce((s, tx) => s + parseFloat(tx.valor), 0)
+      ));
+
+      barsEl.innerHTML = buckets.map(b => {
+        let rec = 0, desp = 0;
+        txs.filter(tx => tx.data_transacao >= b.de && tx.data_transacao <= b.ate).forEach(tx => {
+          if (tx.debitocredito) rec += parseFloat(tx.valor);
+          else desp += parseFloat(tx.valor);
+        });
+        const total = rec + desp;
+        const h = total > 0 ? Math.max(6, Math.round(total / maxVal * 90)) : 4;
+        const cls = rec >= desp ? 'income' : 'expense';
+        return `<div class="chart-col">
+          <div class="chart-bar ${cls}" style="height:${h}%"></div>
+          <span class="chart-day">${b.label}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // ─── Por categoria ───
+    function renderCategorias(txs) {
+      const el = document.getElementById('rep_categorias');
+      if (!txs.length) {
+        el.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:16px 0;">Sem transações neste período.</p>';
+        return;
+      }
+
+      // Agrupa separando receitas e despesas
+      const entradas = {}, saidas = {};
+      txs.forEach(tx => {
+        const catRaw = tx.categoria?.nome_categoria || '';
+        const d   = parseCat(catRaw);
+        const key = tx.id_categoria;
+        const mapa = tx.debitocredito ? entradas : saidas;
+        if (!mapa[key]) mapa[key] = { nome: d.nome, icone: d.icone || 'category', cor: d.cor || '#7c5cfc', total: 0 };
+        mapa[key].total += parseFloat(tx.valor);
+      });
+
+      function buildRows(mapa, isIncome) {
+        const cor    = isIncome ? 'var(--clr-income)' : 'var(--clr-expense)';
+        const sinal  = isIncome ? '+' : '-';
+        return Object.values(mapa)
+          .sort((a, b) => b.total - a.total)
+          .map(c => `
+            <div class="report-row">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:32px;height:32px;border-radius:8px;background:${c.cor}22;display:flex;align-items:center;justify-content:center;">
+                  <span class="material-symbols-outlined icon-fill" style="font-size:16px;color:${c.cor};">${c.icone}</span>
+                </div>
+                <span class="report-row_label">${c.nome}</span>
+              </div>
+              <span class="report-row_value" style="color:${cor};">${sinal}R$ ${fmtBRL(c.total)}</span>
+            </div>`).join('');
+      }
+
+      const hasEntradas = Object.keys(entradas).length > 0;
+      const hasSaidas   = Object.keys(saidas).length > 0;
+
+      const totalEntradas = Object.values(entradas).reduce((s, c) => s + c.total, 0);
+      const totalSaidas   = Object.values(saidas).reduce((s, c) => s + c.total, 0);
+
+      const sectionHeader = (label, total, isIncome) => `
+        <div style="display:flex;justify-content:space-between;align-items:center;
+                    padding:8px 4px 6px;margin-top:16px;
+                    border-bottom:1px solid var(--clr-outline);">
+          <span style="font-size:.75rem;font-weight:700;letter-spacing:.06em;
+                       text-transform:uppercase;color:${isIncome ? 'var(--clr-income)' : 'var(--clr-expense)'};">
+            ${label}
+          </span>
+          <span style="font-size:.8rem;font-weight:700;color:${isIncome ? 'var(--clr-income)' : 'var(--clr-expense)'};">
+            ${isIncome ? '+' : '-'}R$ ${fmtBRL(total)}
+          </span>
+        </div>`;
+
+      let html = '';
+      if (hasEntradas) html += sectionHeader('Entradas', totalEntradas, true)  + buildRows(entradas, true);
+      if (hasSaidas)   html += sectionHeader('Saídas',   totalSaidas,   false) + buildRows(saidas,   false);
+
+      el.innerHTML = html;
+    }
+
+    // ─── Export CSV ───
+    document.getElementById('btn_export_csv').addEventListener('click', () => {
+      const txs = txFiltradas();
+      if (!txs.length) { alert('Nenhuma transação no período selecionado.'); return; }
+      const header = 'Data,Título,Categoria,Conta,Tipo,Valor';
+      const rows = txs.map(tx => {
+        const cat  = parseCat(tx.categoria?.nome_categoria || '').nome || '';
+        const conta = tx.tipo?.conta?.nome_banco || '';
+        const tipo  = tx.debitocredito ? 'Receita' : 'Despesa';
+        return `${tx.data_transacao},"${tx.titulo}","${cat}","${conta}",${tipo},${tx.valor}`;
+      });
+      const csv  = [header, ...rows].join('\n');
+      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = `finsight_relatorio_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click(); URL.revokeObjectURL(url);
+    });
+
+    // ─── Period tabs ───
+    document.querySelectorAll('.filter-tab').forEach((btn, i) => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        _periodo = ['mes','trimestre','ano','personalizado'][i];
+        renderRelatorio();
+      });
+    });
+
+    // ─── Filtros modal ───
+    document.getElementById('btn_aplicar_filtros').addEventListener('click', () => {
+      _filtros.tipo         = document.getElementById('filter_tipo').value;
+      _filtros.id_categoria = document.getElementById('filter_categoria').value;
+      _filtros.id_tipo      = document.getElementById('filter_conta').value;
+      _filtros.de           = document.getElementById('filter_de').value || null;
+      _filtros.ate          = document.getElementById('filter_ate').value || null;
+      if (_filtros.de || _filtros.ate) {
+        _periodo = 'personalizado';
+        document.querySelectorAll('.filter-tab').forEach((b,i) => b.classList.toggle('active', i===3));
+      }
+      closeModal('modal_report_filters');
+      renderRelatorio();
+    });
+
+    document.getElementById('btn_limpar_filtros').addEventListener('click', () => {
+      _filtros = { tipo: 'todas', id_categoria: 'todas', id_tipo: 'todas', de: null, ate: null };
+      document.getElementById('filter_tipo').value = 'todas';
+      document.getElementById('filter_categoria').value = 'todas';
+      document.getElementById('filter_conta').value = 'todas';
+      document.getElementById('filter_de').value = '';
+      document.getElementById('filter_ate').value = '';
+      closeModal('modal_report_filters');
+      renderRelatorio();
+    });
+
+    // ─── Init ───
+    async function initReports() {
+      [_allTx, _allCats, _allContas] = await Promise.all([
+        dbGetTodasTransacoes(_rUser.id_cliente),
+        dbGetCategorias(),
+        dbGetContas(_rUser.id_cliente)
+      ]);
+
+      // Popular selects do modal de filtros
+      const optsCat = '<option value="todas">Todas as categorias</option>' +
+        _allCats.map(c => { const d = parseCat(c.nome_categoria); return `<option value="${c.id_categoria}">${d.nome}</option>`; }).join('');
+      const optsConta = '<option value="todas">Todas as contas</option>' +
+        _allContas.filter(c => c.tipo?.length).map(c => { const tp = getTipoPadrao(c); return `<option value="${tp.id_tipo}">${c.nome_banco}</option>`; }).join('');
+      document.getElementById('filter_categoria').innerHTML = optsCat;
+      document.getElementById('filter_conta').innerHTML = optsConta;
+
+      // Avatar
+      if (_rUser.username) {
+        document.querySelectorAll('.appbar_user_avatar').forEach(el => {
+          el.textContent = _rUser.username.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        });
+        const nameEl = document.querySelector('.appbar_user_name');
+        if (nameEl) nameEl.textContent = _rUser.username;
+      }
+
+      renderRelatorio();
+    }
+
+    initReports();
+  </script>
 
 </body>
 </html>

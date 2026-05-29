@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="../css/modals.css">
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <header class="appbar">
     <div class="appbar_brand">
@@ -32,35 +37,22 @@
           </button>
         </div>
         <div class="profile-name">João da Silva</div>
-        <div class="profile-email">joao@exemplo.com</div>
         <button class="profile-photo-btn">Alterar foto</button>
       </div>
 
       <!-- Personal info -->
       <div class="profile-section">
         <div class="profile-section_title">Informações Pessoais</div>
-        <div class="form-group">
-          <label class="form-label">Nome completo</label>
-          <input type="text" class="form-input" value="João da Silva">
-        </div>
         <div class="form-group" style="margin-bottom:16px;">
-          <label class="form-label">E-mail</label>
-          <input type="email" class="form-input" value="joao@exemplo.com">
+          <label class="form-label">Nome completo</label>
+          <input id="input_nome" type="text" class="form-input" placeholder="Seu nome">
         </div>
-        <button class="btn btn-secondary" style="width:100%;">Salvar alterações</button>
+        <button id="btn_save_nome" class="btn btn-secondary" style="width:100%;">Salvar alterações</button>
       </div>
 
       <!-- Preferences -->
       <div class="profile-section">
         <div class="profile-section_title">Preferências</div>
-
-        <div class="profile-row">
-          <div class="profile-row_left">
-            <span class="material-symbols-outlined profile-row_icon">dark_mode</span>
-            <span class="profile-row_label">Modo escuro</span>
-          </div>
-          <button id="theme_toggle" class="toggle"></button>
-        </div>
 
         <div class="profile-row">
           <div class="profile-row_left">
@@ -80,27 +72,75 @@
       </div>
 
       <!-- Security -->
-      <div class="profile-section">
+      <div class="profile-section" id="security_section">
         <div class="profile-section_title">Segurança</div>
-        <div class="form-group">
-          <label class="form-label">Nova senha</label>
-          <div class="input-wrap">
-            <input id="new_password" type="password" class="form-input" placeholder="••••••••" style="padding-right:44px;">
-            <button type="button" data-pw-toggle="new_password" class="input-suffix-btn">
-              <span class="material-symbols-outlined">visibility</span>
-            </button>
-          </div>
+
+        <!-- Bloqueio PIN -->
+        <div id="security_lock" style="text-align:center;padding:24px 0 8px;">
+          <span class="material-symbols-outlined icon-fill" style="font-size:48px;color:var(--accent);display:block;margin-bottom:12px;">lock</span>
+          <p style="color:var(--t2);font-size:.875rem;margin-bottom:16px;">Esta área é protegida por PIN</p>
+          <button id="btn_unlock" class="btn btn-primary" style="width:100%;">
+            <span class="material-symbols-outlined">pin</span>
+            <span id="btn_unlock_label">Inserir PIN</span>
+          </button>
         </div>
-        <div class="form-group" style="margin-bottom:16px;">
-          <label class="form-label">Confirmar nova senha</label>
-          <div class="input-wrap">
-            <input id="confirm_password" type="password" class="form-input" placeholder="••••••••" style="padding-right:44px;">
-            <button type="button" data-pw-toggle="confirm_password" class="input-suffix-btn">
-              <span class="material-symbols-outlined">visibility</span>
-            </button>
+
+        <!-- Conteúdo desbloqueado (oculto por padrão) -->
+        <div id="security_content" style="display:none;">
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label">E-mail atual</label>
+            <input id="sec_email_show" type="email" class="form-input" readonly style="opacity:.7;">
           </div>
+          <div class="form-group">
+            <label class="form-label">Novo e-mail</label>
+            <input id="sec_email_new" type="email" class="form-input" placeholder="novo@email.com">
+          </div>
+          <button id="btn_change_email" class="btn btn-secondary" style="width:100%;margin-bottom:20px;">
+            <span class="material-symbols-outlined">email</span>Alterar e-mail
+          </button>
+
+          <div style="height:1px;background:var(--b1);margin:8px 0 20px;"></div>
+
+          <!-- Senha -->
+          <div class="form-group">
+            <label class="form-label">Nova senha</label>
+            <div class="input-wrap">
+              <input id="new_password" type="password" class="form-input" placeholder="••••••••" style="padding-right:44px;">
+              <button type="button" data-pw-toggle="new_password" class="input-suffix-btn">
+                <span class="material-symbols-outlined">visibility</span>
+              </button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Confirmar nova senha</label>
+            <div class="input-wrap">
+              <input id="confirm_password" type="password" class="form-input" placeholder="••••••••" style="padding-right:44px;">
+              <button type="button" data-pw-toggle="confirm_password" class="input-suffix-btn">
+                <span class="material-symbols-outlined">visibility</span>
+              </button>
+            </div>
+          </div>
+          <button id="btn_change_password" class="btn btn-secondary" style="width:100%;margin-bottom:20px;">
+            <span class="material-symbols-outlined">lock_reset</span>Atualizar senha
+          </button>
+
+          <div style="height:1px;background:var(--b1);margin:8px 0 20px;"></div>
+
+          <!-- PIN -->
+          <div class="profile-row" style="margin-bottom:8px;">
+            <div class="profile-row_left">
+              <span class="material-symbols-outlined profile-row_icon">pin</span>
+              <span class="profile-row_label">PIN de segurança</span>
+            </div>
+            <button id="btn_change_pin" class="btn btn-ghost" style="font-size:.8rem;padding:6px 10px;">Alterar</button>
+          </div>
+
+          <button id="btn_lock_again" class="btn btn-outline" style="width:100%;margin-top:8px;">
+            <span class="material-symbols-outlined">lock</span>Bloquear novamente
+          </button>
         </div>
-        <button class="btn btn-secondary" style="width:100%;">Atualizar senha</button>
       </div>
 
       <!-- About -->
@@ -121,7 +161,7 @@
       </div>
 
       <!-- Actions -->
-      <button class="btn btn-outline" style="width:100%;margin-bottom:10px;">
+      <button id="btn_logout" class="btn btn-outline" style="width:100%;margin-bottom:10px;">
         <span class="material-symbols-outlined">logout</span>Sair da conta
       </button>
       <button class="btn btn-danger" data-modal="modal_confirm_delete_account">
@@ -155,6 +195,47 @@
     </a>
   </nav>
 
+  <!-- Modal: PIN -->
+  <div id="modal_pin" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 id="pin_modal_title" class="modal-title">Inserir PIN</h2>
+        <button class="modal-close" data-close="modal_pin"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body" style="text-align:center;">
+        <p id="pin_modal_subtitle" style="color:var(--t2);font-size:.875rem;margin-bottom:24px;">Digite seu PIN de 4 dígitos</p>
+
+        <!-- 4 boxes -->
+        <div style="display:flex;justify-content:center;gap:12px;margin-bottom:8px;">
+          <div class="pin-box" id="pin_b0"></div>
+          <div class="pin-box" id="pin_b1"></div>
+          <div class="pin-box" id="pin_b2"></div>
+          <div class="pin-box" id="pin_b3"></div>
+        </div>
+        <p id="pin_error" style="color:var(--clr-expense,#ef4444);font-size:.8rem;min-height:20px;margin-bottom:16px;"></p>
+
+        <!-- Teclado numérico -->
+        <div class="pin-keyboard">
+          <button class="pin-key" data-d="1">1</button>
+          <button class="pin-key" data-d="2">2</button>
+          <button class="pin-key" data-d="3">3</button>
+          <button class="pin-key" data-d="4">4</button>
+          <button class="pin-key" data-d="5">5</button>
+          <button class="pin-key" data-d="6">6</button>
+          <button class="pin-key" data-d="7">7</button>
+          <button class="pin-key" data-d="8">8</button>
+          <button class="pin-key" data-d="9">9</button>
+          <div></div>
+          <button class="pin-key" data-d="0">0</button>
+          <button class="pin-key pin-key--del" id="pin_del">
+            <span class="material-symbols-outlined" style="font-size:20px;">backspace</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: Confirmar exclusão de conta -->
   <div id="modal_confirm_delete_account" class="modal-overlay">
     <div class="modal-sheet">
@@ -175,8 +256,309 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <style>
+    .pin-box {
+      width: 52px; height: 60px;
+      border: 2px solid var(--b1);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 700; color: var(--t1);
+      background: var(--s1);
+      transition: border-color .15s;
+    }
+    .pin-box.active  { border-color: var(--accent); }
+    .pin-box.filled::after { content: '●'; font-size: 20px; }
+    .pin-box.shake   { animation: pinShake .3s ease; }
+    @keyframes pinShake {
+      0%,100%{ transform:translateX(0) }
+      20%    { transform:translateX(-6px) }
+      40%    { transform:translateX(6px) }
+      60%    { transform:translateX(-4px) }
+      80%    { transform:translateX(4px) }
+    }
+    .pin-keyboard {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 10px; max-width: 240px; margin: 0 auto;
+    }
+    .pin-key {
+      height: 56px; border-radius: 12px;
+      background: var(--s2); color: var(--t1);
+      font-size: 1.25rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .1s, transform .1s;
+      border: none; cursor: pointer;
+    }
+    .pin-key:active { background: var(--s3); transform: scale(.95); }
+    .pin-key--del   { background: var(--s1); color: var(--t2); }
+  </style>
+
+  <script>
+    let _user = {};
+    try { _user = JSON.parse(localStorage.getItem('finsight-user') || '{}'); } catch(e) {}
+
+    const nome  = _user.username || _user.nome || '';
+    const email = _user.email    || '';
+
+    // Preenche dados do usuário
+    if (nome) {
+      const initials = nome.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      document.querySelector('.profile-name').textContent = nome;
+      document.querySelector('.profile-avatar_initials').textContent = initials;
+      const inputNome = document.getElementById('input_nome');
+      if (inputNome) inputNome.value = nome;
+    }
+    const secEmailShow = document.getElementById('sec_email_show');
+    if (secEmailShow) secEmailShow.value = email;
+
+    // Salvar nome
+    document.getElementById('btn_save_nome').addEventListener('click', async function () {
+      const novoNome = document.getElementById('input_nome').value.trim();
+      if (!novoNome) { alert('Informe um nome.'); return; }
+      this.disabled = true;
+      try {
+        const { error } = await _db.from('cliente').update({ username: novoNome }).eq('id_cliente', _user.id_cliente);
+        if (error) throw error;
+        _user.username = novoNome;
+        localStorage.setItem('finsight-user', JSON.stringify(_user));
+        document.querySelector('.profile-name').textContent = novoNome;
+        document.querySelector('.profile-avatar_initials').textContent =
+          novoNome.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        showToast('Nome atualizado!');
+      } catch(e) { alert('Erro: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── PIN ───
+    const PIN_KEY = 'finsight-pin';
+    let _pinBuffer  = '';
+    let _pinMode    = 'verify'; // 'verify' | 'create' | 'confirm' | 'change'
+    let _pinFirst   = '';       // armazena o 1º PIN na criação/confirmação
+    let _pinCallback = null;
+
+    function getPin()     { return localStorage.getItem(PIN_KEY); }
+    function savePin(pin) { localStorage.setItem(PIN_KEY, pin); }
+
+    // Atualiza os 4 boxes visuais
+    function renderPinBoxes() {
+      for (let i = 0; i < 4; i++) {
+        const box = document.getElementById(`pin_b${i}`);
+        box.classList.toggle('filled', i < _pinBuffer.length);
+        box.classList.toggle('active', i === _pinBuffer.length);
+        box.classList.remove('shake');
+      }
+    }
+
+    function shakePinBoxes() {
+      for (let i = 0; i < 4; i++) {
+        const box = document.getElementById(`pin_b${i}`);
+        box.classList.remove('shake');
+        void box.offsetWidth; // reflow
+        box.classList.add('shake');
+      }
+    }
+
+    function openPinModal(mode, callback) {
+      _pinMode     = mode;
+      _pinBuffer   = '';
+      _pinCallback = callback;
+      _pinFirst    = '';
+      document.getElementById('pin_error').textContent = '';
+      renderPinBoxes();
+
+      const titles = {
+        verify:  'Inserir PIN',
+        create:  'Criar PIN',
+        confirm: 'Confirmar PIN',
+        change:  'PIN atual',
+      };
+      const subs = {
+        verify:  'Digite seu PIN de 4 dígitos para continuar',
+        create:  'Escolha um PIN de 4 dígitos',
+        confirm: 'Digite o PIN novamente para confirmar',
+        change:  'Digite seu PIN atual para alterá-lo',
+      };
+      document.getElementById('pin_modal_title').textContent    = titles[mode];
+      document.getElementById('pin_modal_subtitle').textContent = subs[mode];
+      openModal('modal_pin');
+    }
+
+    function onPinDigit(d) {
+      if (_pinBuffer.length >= 4) return;
+      _pinBuffer += d;
+      renderPinBoxes();
+      if (_pinBuffer.length === 4) setTimeout(processPinSubmit, 120);
+    }
+
+    function onPinDelete() {
+      _pinBuffer = _pinBuffer.slice(0, -1);
+      renderPinBoxes();
+    }
+
+    function processPinSubmit() {
+      const entered = _pinBuffer;
+      _pinBuffer = '';
+
+      if (_pinMode === 'verify') {
+        if (entered === getPin()) {
+          closeModal('modal_pin');
+          unlockSecurity();
+        } else {
+          document.getElementById('pin_error').textContent = 'PIN incorreto. Tente novamente.';
+          shakePinBoxes();
+          renderPinBoxes();
+        }
+
+      } else if (_pinMode === 'create') {
+        _pinFirst  = entered;
+        _pinMode   = 'confirm';
+        _pinBuffer = '';
+        document.getElementById('pin_modal_title').textContent    = 'Confirmar PIN';
+        document.getElementById('pin_modal_subtitle').textContent = 'Digite o PIN novamente para confirmar';
+        document.getElementById('pin_error').textContent = '';
+        renderPinBoxes();
+
+      } else if (_pinMode === 'confirm') {
+        if (entered === _pinFirst) {
+          savePin(entered);
+          closeModal('modal_pin');
+          document.getElementById('btn_unlock_label').textContent = 'Inserir PIN';
+          unlockSecurity();
+          showToast('PIN criado com sucesso!');
+        } else {
+          document.getElementById('pin_error').textContent = 'Os PINs não coincidem. Tente novamente.';
+          shakePinBoxes();
+          _pinFirst  = '';
+          _pinMode   = 'create';
+          document.getElementById('pin_modal_title').textContent    = 'Criar PIN';
+          document.getElementById('pin_modal_subtitle').textContent = 'Escolha um PIN de 4 dígitos';
+          renderPinBoxes();
+        }
+
+      } else if (_pinMode === 'change') {
+        if (entered === getPin()) {
+          // PIN atual correto — pede o novo
+          _pinMode  = 'create';
+          _pinFirst = '';
+          document.getElementById('pin_modal_title').textContent    = 'Novo PIN';
+          document.getElementById('pin_modal_subtitle').textContent = 'Escolha um novo PIN de 4 dígitos';
+          document.getElementById('pin_error').textContent = '';
+          renderPinBoxes();
+        } else {
+          document.getElementById('pin_error').textContent = 'PIN incorreto.';
+          shakePinBoxes();
+          renderPinBoxes();
+        }
+      }
+    }
+
+    // Teclado
+    document.querySelectorAll('.pin-key[data-d]').forEach(btn => {
+      btn.addEventListener('click', () => onPinDigit(btn.dataset.d));
+    });
+    document.getElementById('pin_del').addEventListener('click', onPinDelete);
+
+    // Teclado físico enquanto modal estiver aberto
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('modal_pin').classList.contains('is-open')) return;
+      if (e.key >= '0' && e.key <= '9') onPinDigit(e.key);
+      if (e.key === 'Backspace') onPinDelete();
+    });
+
+    // ─── Botão desbloquear ───
+    document.getElementById('btn_unlock').addEventListener('click', () => {
+      if (!getPin()) {
+        openPinModal('create', null);
+      } else {
+        openPinModal('verify', null);
+      }
+    });
+
+    // Atualiza label do botão conforme PIN existe ou não
+    if (!getPin()) {
+      document.getElementById('btn_unlock_label').textContent = 'Criar PIN';
+    }
+
+    // ─── Desbloquear seção ───
+    function unlockSecurity() {
+      document.getElementById('security_lock').style.display   = 'none';
+      document.getElementById('security_content').style.display = '';
+    }
+    function lockSecurity() {
+      document.getElementById('security_lock').style.display   = '';
+      document.getElementById('security_content').style.display = 'none';
+    }
+
+    // Bloquear novamente
+    document.getElementById('btn_lock_again').addEventListener('click', lockSecurity);
+
+    // Alterar PIN
+    document.getElementById('btn_change_pin').addEventListener('click', () => {
+      openPinModal('change', null);
+    });
+
+    // ─── Alterar e-mail ───
+    document.getElementById('btn_change_email').addEventListener('click', async function () {
+      const newEmail = document.getElementById('sec_email_new').value.trim();
+      if (!newEmail) { alert('Informe o novo e-mail.'); return; }
+      this.disabled = true;
+      try {
+        const { error } = await _db.from('cliente').update({ email: newEmail }).eq('id_cliente', _user.id_cliente);
+        if (error) throw error;
+        _user.email = newEmail;
+        localStorage.setItem('finsight-user', JSON.stringify(_user));
+        document.querySelector('.profile-email').textContent = newEmail;
+        document.getElementById('sec_email_show').value = newEmail;
+        document.getElementById('sec_email_new').value  = '';
+        showToast('E-mail atualizado!');
+      } catch(e) { alert('Erro: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── Alterar senha ───
+    document.getElementById('btn_change_password').addEventListener('click', async function () {
+      const nova     = document.getElementById('new_password').value;
+      const confirma = document.getElementById('confirm_password').value;
+      if (!nova || nova.length < 6) { alert('A senha deve ter pelo menos 6 caracteres.'); return; }
+      if (nova !== confirma)         { alert('As senhas não coincidem.'); return; }
+      this.disabled = true;
+      try {
+        const { error } = await _db.from('cliente').update({ password: nova }).eq('id_cliente', _user.id_cliente);
+        if (error) throw error;
+        document.getElementById('new_password').value     = '';
+        document.getElementById('confirm_password').value = '';
+        showToast('Senha atualizada!');
+      } catch(e) { alert('Erro: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── Toast ───
+    function showToast(msg) {
+      let t = document.getElementById('profile_toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'profile_toast';
+        t.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+          background:var(--s3);color:var(--t1);padding:10px 20px;border-radius:99px;
+          font-size:.875rem;font-weight:600;z-index:999;box-shadow:var(--sh-md);
+          transition:opacity .3s;white-space:nowrap;`;
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2500);
+    }
+
+    // Logout
+    document.getElementById('btn_logout').addEventListener('click', function () {
+      localStorage.clear();
+      window.location.replace('login.html');
+    });
+  </script>
 
 </body>
 </html>

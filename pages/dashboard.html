@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 
 <head>
@@ -15,6 +15,11 @@
 </head>
 
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <!-- App Bar -->
   <header class="appbar">
@@ -27,7 +32,10 @@
       <span class="appbar_user_name" id="appbar_name">João Silva</span>
     </div>
     <div class="appbar_actions">
-      <button class="appbar_btn"><span class="material-symbols-outlined">notifications</span></button>
+      <button class="appbar_btn" id="btn_notificacoes" data-modal="modal_notificacoes">
+        <span class="material-symbols-outlined">notifications</span>
+        <span id="notif_badge" style="display:none;position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--clr-expense);"></span>
+      </button>
       <a href="profile.html" class="appbar_avatar-btn">
         <div class="appbar_user_avatar">JS</div>
       </a>
@@ -59,19 +67,19 @@
 
       <!-- Month nav -->
       <div class="month-nav">
-        <button class="month-nav_btn"><span class="material-symbols-outlined">chevron_left</span></button>
-        <span class="month-nav_label">Maio 2026</span>
-        <button class="month-nav_btn"><span class="material-symbols-outlined">chevron_right</span></button>
+        <button id="btn_mes_prev" class="month-nav_btn"><span class="material-symbols-outlined">chevron_left</span></button>
+        <span id="dash_mes_label" class="month-nav_label">—</span>
+        <button id="btn_mes_next" class="month-nav_btn"><span class="material-symbols-outlined">chevron_right</span></button>
       </div>
 
       <!-- Balance hero -->
       <div class="balance-hero">
         <div class="balance-hero_label">Saldo Total</div>
-        <div class="balance-hero_amount mono">R$ 13.280,50</div>
+        <div id="dash_saldo" class="balance-hero_amount mono">R$ —</div>
         <div class="balance-hero_row">
-          <div class="balance-hero_badge">
+          <div id="dash_saldo_badge" class="balance-hero_badge" style="display:none;">
             <span class="material-symbols-outlined icon-fill" style="font-size:13px;">trending_up</span>
-            +12% este mês
+            <span id="dash_saldo_badge_txt"></span>
           </div>
         </div>
       </div>
@@ -82,14 +90,14 @@
           <div class="stat-card_icon income"><span class="material-symbols-outlined">south</span></div>
           <div>
             <div class="stat-card_label">Receitas</div>
-            <div class="stat-card_value">R$ 5.500</div>
+            <div id="dash_receitas" class="stat-card_value">R$ —</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-card_icon expense"><span class="material-symbols-outlined">north</span></div>
           <div>
             <div class="stat-card_label">Despesas</div>
-            <div class="stat-card_value">R$ 6.219</div>
+            <div id="dash_despesas" class="stat-card_value">R$ —</div>
           </div>
         </div>
       </div>
@@ -134,101 +142,14 @@
         <span class="section-title">Metas</span>
         <a href="goals.html" class="section-link">Ver todas</a>
       </div>
-      <div class="goals-scroll scrollbar-hide">
-        <div class="goal-mini">
-          <div class="goal-mini_name">✈️ Europa</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width:28%"></div>
-          </div>
-          <div class="goal-mini_pct">28%</div>
-        </div>
-        <div class="goal-mini">
-          <div class="goal-mini_name">🚗 Carro novo</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width:65%"></div>
-          </div>
-          <div class="goal-mini_pct">65%</div>
-        </div>
-        <div class="goal-mini">
-          <div class="goal-mini_name">🏠 Reserva</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width:87%"></div>
-          </div>
-          <div class="goal-mini_pct">87%</div>
-        </div>
-      </div>
+      <div id="dash_goals" class="goals-scroll scrollbar-hide"></div>
 
       <!-- Recent transactions -->
       <div class="section-header">
         <span class="section-title">Recentes</span>
         <a href="transactions.html" class="section-link">Ver todas</a>
       </div>
-      <div class="tx-list">
-        <!-- RF03: tx-check for effectuation -->
-        <div class="tx-row">
-          <button class="tx-check done" title="Efetivada">
-            <span class="material-symbols-outlined">check</span>
-          </button>
-          <div class="tx-icon" style="background:rgba(251,146,60,.15);color:#fb923c;">
-            <span class="material-symbols-outlined icon-fill">restaurant</span>
-          </div>
-          <div class="tx-info">
-            <div class="tx-name">iFood</div>
-            <div class="tx-meta">Alimentação · hoje</div>
-          </div>
-          <div class="tx-right">
-            <span class="tx-amount expense">-R$ 45,90</span>
-          </div>
-        </div>
-
-        <div class="tx-row">
-          <button class="tx-check done" title="Efetivada">
-            <span class="material-symbols-outlined">check</span>
-          </button>
-          <div class="tx-icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
-            <span class="material-symbols-outlined icon-fill">payments</span>
-          </div>
-          <div class="tx-info">
-            <div class="tx-name">Salário</div>
-            <div class="tx-meta">Receita · ontem</div>
-          </div>
-          <div class="tx-right">
-            <span class="tx-amount income">+R$ 5.500,00</span>
-          </div>
-        </div>
-
-        <div class="tx-row">
-          <button class="tx-check" title="Marcar como efetivada">
-            <span class="material-symbols-outlined">check</span>
-          </button>
-          <div class="tx-icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
-            <span class="material-symbols-outlined icon-fill">directions_car</span>
-          </div>
-          <div class="tx-info">
-            <div class="tx-name">Combustível</div>
-            <div class="tx-meta">Transporte · 06 mai <span class="tx-pill pending">Pendente</span></div>
-          </div>
-          <div class="tx-right">
-            <span class="tx-amount expense pending">-R$ 180,00</span>
-          </div>
-        </div>
-
-        <div class="tx-row">
-          <button class="tx-check done" title="Efetivada">
-            <span class="material-symbols-outlined">check</span>
-          </button>
-          <div class="tx-icon" style="background:rgba(52,211,153,.15);color:#34d399;">
-            <span class="material-symbols-outlined icon-fill">favorite</span>
-          </div>
-          <div class="tx-info">
-            <div class="tx-name">Farmácia</div>
-            <div class="tx-meta">Saúde · 05 mai</div>
-          </div>
-          <div class="tx-right">
-            <span class="tx-amount expense">-R$ 62,00</span>
-          </div>
-        </div>
-      </div>
+      <div id="dash_recentes" class="tx-list"></div>
 
     </div>
   </main>
@@ -261,6 +182,20 @@
       <span>Perfil</span>
     </a>
   </nav>
+
+  <!-- Modal: Notificações -->
+  <div id="modal_notificacoes" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Notificações</h2>
+        <button class="modal-close" data-close="modal_notificacoes"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div id="notif_list" style="display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal: FAB type selector -->
   <div id="modal_fab_type" class="modal-overlay">
@@ -301,92 +236,40 @@
       <div class="modal-handle"></div>
       <div class="modal-header">
         <h2 class="modal-title">Nova Despesa</h2>
-        <button class="modal-close" data-close="modal_new_expense">
-          <span class="material-symbols-outlined">close</span>
-        </button>
+        <button class="modal-close" data-close="modal_new_expense"><span class="material-symbols-outlined">close</span></button>
       </div>
       <div class="modal-body">
         <div class="amount-field">
           <div class="amount-field_label">Valor</div>
           <div class="amount-field_wrap">
             <span class="amount-field_currency">R$</span>
-            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+            <input id="dexp_valor" type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Descrição</label>
-          <input type="text" class="form-input" placeholder="Ex: iFood, Supermercado...">
+          <label class="form-label">Título</label>
+          <input id="dexp_titulo" type="text" class="form-input" placeholder="Ex: iFood, Supermercado...">
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-select">
-            <option>Alimentação</option>
-            <option>Transporte</option>
-            <option>Saúde</option>
-            <option>Lazer</option>
-            <option>Compras</option>
-            <option>Moradia</option>
-          </select>
+          <select id="dexp_categoria" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Conta</label>
-          <select class="form-select">
-            <option>Conta Nubank</option>
-            <option>Poupança</option>
-            <option>Carteira física</option>
-          </select>
+          <select id="dexp_conta" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Data</label>
-          <input type="date" class="form-input">
+          <input id="dexp_data" type="date" class="form-input">
         </div>
-
-        <!-- RF02: parcelas -->
         <label class="modal-checkbox-row">
-          <input type="checkbox" id="cb_parcel" data-toggle-parcel="parcel_row">
-          <span class="modal-checkbox-label">Parcelado</span>
-        </label>
-        <div id="parcel_row" class="parcel-row" style="display:none;">
-          <div class="form-group">
-            <label class="form-label">Parcelas</label>
-            <select class="form-select">
-              <option>2x</option>
-              <option>3x</option>
-              <option>4x</option>
-              <option>5x</option>
-              <option>6x</option>
-              <option>12x</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Dia de venc.</label>
-            <input type="number" class="form-input" placeholder="1-31" min="1" max="31">
-          </div>
-        </div>
-
-        <!-- RF02: conta fixa -->
-        <label class="modal-checkbox-row">
-          <input type="checkbox" id="cb_fixed" data-toggle-fixed="fixed_extra">
-          <span class="modal-checkbox-label">Conta fixa (mensal)</span>
-        </label>
-        <div id="fixed_extra" class="fixed-extra" style="display:none;">
-          <div class="form-group">
-            <label class="form-label">Dia do vencimento</label>
-            <input type="number" class="form-input" placeholder="Ex: 15" min="1" max="31">
-          </div>
-        </div>
-
-        <!-- RF03: efetivada -->
-        <label class="modal-checkbox-row">
-          <input type="checkbox" checked>
+          <input id="dexp_efetivada" type="checkbox" checked>
           <span class="modal-checkbox-label">Marcar como efetivada</span>
         </label>
-
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_expense">Cancelar</button>
-          <button class="btn-modal-primary">
-            <span class="material-symbols-outlined" style="font-size:18px;">check</span>
-            Salvar
+          <button id="btn_dash_exp" class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
           </button>
         </div>
       </div>
@@ -399,52 +282,40 @@
       <div class="modal-handle"></div>
       <div class="modal-header">
         <h2 class="modal-title">Nova Receita</h2>
-        <button class="modal-close" data-close="modal_new_income">
-          <span class="material-symbols-outlined">close</span>
-        </button>
+        <button class="modal-close" data-close="modal_new_income"><span class="material-symbols-outlined">close</span></button>
       </div>
       <div class="modal-body">
         <div class="amount-field">
           <div class="amount-field_label">Valor</div>
           <div class="amount-field_wrap">
             <span class="amount-field_currency">R$</span>
-            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+            <input id="dinc_valor" type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Descrição</label>
-          <input type="text" class="form-input" placeholder="Ex: Salário, Freelance...">
+          <label class="form-label">Título</label>
+          <input id="dinc_titulo" type="text" class="form-input" placeholder="Ex: Salário, Freelance...">
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-select">
-            <option>Salário</option>
-            <option>Freelance</option>
-            <option>Investimentos</option>
-            <option>Outros</option>
-          </select>
+          <select id="dinc_categoria" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Conta</label>
-          <select class="form-select">
-            <option>Conta Nubank</option>
-            <option>Poupança</option>
-            <option>Carteira física</option>
-          </select>
+          <select id="dinc_conta" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Data</label>
-          <input type="date" class="form-input">
+          <input id="dinc_data" type="date" class="form-input">
         </div>
         <label class="modal-checkbox-row">
-          <input type="checkbox" checked>
+          <input id="dinc_efetivada" type="checkbox" checked>
           <span class="modal-checkbox-label">Marcar como efetivada</span>
         </label>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_income">Cancelar</button>
-          <button class="btn-modal-primary">
-            <span class="material-symbols-outlined" style="font-size:18px;">check</span>
-            Salvar
+          <button id="btn_dash_inc" class="btn-modal-primary">
+            <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
           </button>
         </div>
       </div>
@@ -570,8 +441,372 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    const _dUser = JSON.parse(localStorage.getItem('finsight-user') || '{}');
+    const GOAL_COLORS = ['#a78bfa','#60a5fa','#22c55e','#fb923c','#f87171','#34d399'];
+
+    function fmtBRL(v, dec = 2) {
+      return Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    }
+    function parseCat(raw) {
+      try { return JSON.parse(raw); } catch { return { nome: raw, icone: 'category', cor: '#7c5cfc' }; }
+    }
+    function parseMeta(raw) {
+      try { return JSON.parse(raw); } catch { return { nome: raw, icone: 'ads_click' }; }
+    }
+    function hoje() { return new Date().toISOString().slice(0, 10); }
+    function fmtDataCurta(iso) {
+      if (!iso) return '';
+      const [, m, d] = iso.split('-');
+      const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return `${parseInt(d)} ${meses[parseInt(m)-1]}`;
+    }
+
+    // ─── Navegação por mês ───
+    let _dashOffset = 0; // 0 = mês atual, -1 = mês anterior, etc.
+    const _MESES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+    function getMesRef() {
+      const d = new Date();
+      d.setDate(1);
+      d.setMonth(d.getMonth() + _dashOffset);
+      return d;
+    }
+    function getMesPrefixo() {
+      const d = getMesRef();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    }
+    function atualizarLabelMes() {
+      const d = getMesRef();
+      document.getElementById('dash_mes_label').textContent = `${_MESES_PT[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    document.getElementById('btn_mes_prev').addEventListener('click', () => {
+      _dashOffset--;
+      atualizarLabelMes();
+      renderDashboard(_dashCache.contas, _dashCache.txAll, _dashCache.metas);
+    });
+    document.getElementById('btn_mes_next').addEventListener('click', () => {
+      if (_dashOffset >= 0) return; // não deixa ir além do mês atual
+      _dashOffset++;
+      atualizarLabelMes();
+      renderDashboard(_dashCache.contas, _dashCache.txAll, _dashCache.metas);
+    });
+
+    // Cache dos dados para re-render sem nova query
+    const _dashCache = { contas: [], txAll: [], metas: [] };
+
+    // ─── Render ───
+    function renderDashboard(contas, txAll, metas) {
+      const mesAtual = getMesPrefixo();
+      const now      = getMesRef();
+      const dataHoje = hoje();
+      const dataOntem = new Date(Date.now()-86400000).toISOString().slice(0,10);
+
+      // Receitas e despesas do mês selecionado
+      let recMes = 0, despMes = 0;
+      txAll.forEach(tx => {
+        if (!(tx.data_transacao || '').startsWith(mesAtual)) return;
+        if (tx.debitocredito) recMes  += parseFloat(tx.valor);
+        else                   despMes += parseFloat(tx.valor);
+      });
+      document.getElementById('dash_receitas').textContent = 'R$ ' + fmtBRL(recMes, 0);
+      document.getElementById('dash_despesas').textContent = 'R$ ' + fmtBRL(despMes, 0);
+
+      // Saldo: mês atual = saldo real das contas | mês passado = resultado do mês (rec - desp)
+      const saldoLabel = document.querySelector('.balance-hero_label');
+      let saldoTotal;
+      if (_dashOffset === 0) {
+        // Mês atual: saldo real das carteiras
+        saldoTotal = 0;
+        contas.forEach(c => {
+          const defaultTipo = getTipoPadrao(c);
+          saldoTotal += parseFloat(defaultTipo?.saldo_atual || 0);
+        });
+        if (saldoLabel) saldoLabel.textContent = 'Saldo Total';
+      } else {
+        // Mês passado: resultado líquido do mês
+        saldoTotal = recMes - despMes;
+        if (saldoLabel) saldoLabel.textContent = 'Resultado do mês';
+      }
+      const saldoEl = document.getElementById('dash_saldo');
+      saldoEl.textContent = (saldoTotal < 0 ? '-' : '') + 'R$ ' + fmtBRL(Math.abs(saldoTotal));
+      saldoEl.style.color = saldoTotal < 0 ? 'var(--clr-expense)' : '';
+
+      // Alert banner
+      const banner = document.querySelector('.alert-banner');
+      if (banner) {
+        if (despMes > recMes && recMes > 0) {
+          banner.style.display = '';
+          banner.querySelector('.alert-banner_body').textContent =
+            `Suas despesas este mês (R$ ${fmtBRL(despMes,0)}) já superam suas receitas (R$ ${fmtBRL(recMes,0)}). Revise seus gastos.`;
+        } else {
+          banner.style.display = 'none';
+        }
+      }
+
+      // Gráfico — dias da semana do mês visualizado
+      const isCurrentMonth = _dashOffset === 0;
+      const refDate = isCurrentMonth ? new Date() : new Date(now.getFullYear(), now.getMonth() + 1, 0); // último dia do mês se passado
+      const dias = Array.from({length:7}, (_,i) => {
+        const d = new Date(refDate.getTime() - (6-i)*86400000);
+        return d.toISOString().slice(0,10);
+      });
+      const dayLabels = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+      const maxVal = Math.max(1, ...dias.map(d => {
+        let s = 0;
+        txAll.filter(tx => tx.data_transacao === d).forEach(tx => s += parseFloat(tx.valor));
+        return s;
+      }));
+      const chartBars = document.querySelector('.chart-bars');
+      if (chartBars) {
+        chartBars.innerHTML = dias.map(d => {
+          let rec = 0, desp = 0;
+          txAll.filter(tx => tx.data_transacao === d).forEach(tx => {
+            if (tx.debitocredito) rec += parseFloat(tx.valor);
+            else desp += parseFloat(tx.valor);
+          });
+          const total = rec + desp;
+          const h     = total > 0 ? Math.max(8, Math.round(total / maxVal * 90)) : 4;
+          const cls   = rec > desp ? 'income' : 'expense';
+          const dow   = new Date(d + 'T12:00').getDay();
+          return `<div class="chart-col">
+            <div class="chart-bar ${cls}" style="height:${h}%"></div>
+            <span class="chart-day">${dayLabels[dow]}</span>
+          </div>`;
+        }).join('');
+      }
+
+      // Metas mini
+      const goalContainer = document.getElementById('dash_goals');
+      if (metas.length) {
+        goalContainer.innerHTML = metas.slice(0,4).map((m, i) => {
+          const d    = parseMeta(m.nome);
+          const pct  = Math.min(100, Math.round((parseFloat(m.saldo_atual)||0) / (parseFloat(m.saldo_objetivo)||1) * 100));
+          const cor  = GOAL_COLORS[i % GOAL_COLORS.length];
+          return `<div class="goal-mini">
+            <div class="goal-mini_name">${d.nome}</div>
+            <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${cor};"></div></div>
+            <div class="goal-mini_pct">${pct}%</div>
+          </div>`;
+        }).join('');
+      } else {
+        goalContainer.innerHTML = '<p style="color:var(--clr-on-surface-variant);font-size:.85rem;padding:8px 0;">Nenhuma meta criada ainda.</p>';
+      }
+
+      // Recentes (últimas 5)
+      const recentContainer = document.getElementById('dash_recentes');
+      const recentes = txAll.slice(0, 5);
+      if (recentes.length) {
+        recentContainer.innerHTML = recentes.map(tx => {
+          const catData   = parseCat(tx.categoria?.nome_categoria || '{}');
+          const cor       = catData.cor   || '#7c5cfc';
+          const icone     = catData.icone || 'swap_horiz';
+          const isCredit  = tx.debitocredito;
+          const amtClass  = isCredit ? 'income' : (tx.efetividade ? 'expense' : 'expense pending');
+          const amtSign   = isCredit ? '+' : '-';
+          let metaLabel;
+          if (tx.data_transacao === dataHoje) metaLabel = 'hoje';
+          else if (tx.data_transacao === dataOntem) metaLabel = 'ontem';
+          else metaLabel = fmtDataCurta(tx.data_transacao);
+          const pendPill = !tx.efetividade ? '<span class="tx-pill pending">Pendente</span>' : '';
+          return `
+            <div class="tx-row">
+              <button class="tx-check ${tx.efetividade ? 'done' : ''}" title="${tx.efetividade ? 'Efetivada' : 'Pendente'}">
+                <span class="material-symbols-outlined">check</span>
+              </button>
+              <div class="tx-icon" style="background:${cor}22;color:${cor};">
+                <span class="material-symbols-outlined icon-fill">${icone}</span>
+              </div>
+              <div class="tx-info">
+                <div class="tx-name">${tx.titulo}</div>
+                <div class="tx-meta">${catData.nome || ''} · ${metaLabel} ${pendPill}</div>
+              </div>
+              <div class="tx-right">
+                <span class="tx-amount ${amtClass}">${amtSign}R$ ${fmtBRL(tx.valor)}</span>
+              </div>
+            </div>`;
+        }).join('');
+      } else {
+        recentContainer.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:24px 0;">Nenhuma transação ainda.</p>';
+      }
+    }
+
+    // ─── Selects nos modais ───
+    function popularSelectsDash(contas, cats) {
+      const optsCat   = cats.map(c => { const d = parseCat(c.nome_categoria); return `<option value="${c.id_categoria}">${d.nome}</option>`; }).join('');
+      const optsConta = contas.filter(c => c.tipo?.length)
+        .map(c => { const tp = getTipoPadrao(c); return `<option value="${tp.id_tipo}">${c.nome_banco}</option>`; }).join('');
+      const semCat   = '<option value="" disabled selected>— selecione —</option>';
+      const semConta = '<option value="" disabled selected>— selecione —</option>';
+
+      ['dexp_categoria','dinc_categoria'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = semCat + optsCat;
+      });
+      ['dexp_conta','dinc_conta'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = semConta + optsConta;
+      });
+      ['dexp_data','dinc_data'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.value) el.value = hoje();
+      });
+    }
+
+    // ─── Salvar Despesa ───
+    document.getElementById('btn_dash_exp').addEventListener('click', async function () {
+      const valor    = parseFloat(document.getElementById('dexp_valor').value.replace(',','.'));
+      const titulo   = document.getElementById('dexp_titulo').value.trim();
+      const id_cat   = parseInt(document.getElementById('dexp_categoria').value);
+      const id_tipo  = parseInt(document.getElementById('dexp_conta').value);
+      const data     = document.getElementById('dexp_data').value;
+      const efet     = document.getElementById('dexp_efetivada').checked;
+      if (!valor || !titulo || !id_cat || !id_tipo || !data) { alert('Preencha todos os campos.'); return; }
+      this.disabled = true;
+      try {
+        await dbAddTransacao({ valor, data_transacao: data, titulo, id_categoria: id_cat,
+          id_tipo, debitocredito: false, efetividade: efet, data_efetividade: efet ? data : null });
+        if (efet) await dbUpdateSaldo(id_tipo, -valor);
+        document.getElementById('dexp_valor').value = '';
+        document.getElementById('dexp_titulo').value = '';
+        closeModal('modal_new_expense');
+        await initDashboard();
+      } catch(e) { alert('Erro: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── Salvar Receita ───
+    document.getElementById('btn_dash_inc').addEventListener('click', async function () {
+      const valor   = parseFloat(document.getElementById('dinc_valor').value.replace(',','.'));
+      const titulo  = document.getElementById('dinc_titulo').value.trim();
+      const id_cat  = parseInt(document.getElementById('dinc_categoria').value);
+      const id_tipo = parseInt(document.getElementById('dinc_conta').value);
+      const data    = document.getElementById('dinc_data').value;
+      const efet    = document.getElementById('dinc_efetivada').checked;
+      if (!valor || !titulo || !id_cat || !id_tipo || !data) { alert('Preencha todos os campos.'); return; }
+      this.disabled = true;
+      try {
+        await dbAddTransacao({ valor, data_transacao: data, titulo, id_categoria: id_cat,
+          id_tipo, debitocredito: true, efetividade: efet, data_efetividade: efet ? data : null });
+        if (efet) await dbUpdateSaldo(id_tipo, valor);
+        document.getElementById('dinc_valor').value = '';
+        document.getElementById('dinc_titulo').value = '';
+        closeModal('modal_new_income');
+        await initDashboard();
+      } catch(e) { alert('Erro: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── FAB ───
+    document.querySelectorAll('.fab-type-card').forEach(card => {
+      card.addEventListener('click', function () {
+        closeModal('modal_fab_type');
+        if (this.dataset.target) openModal(this.dataset.target);
+      });
+    });
+
+    // ─── Reminder banner (oculta por padrão até ter dados) ───
+    const reminderBanner = document.querySelector('.reminder-banner');
+    if (reminderBanner) reminderBanner.style.display = 'none';
+
+    // Avatar appbar
+    if (_dUser.username) {
+      const initials = _dUser.username.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      document.querySelectorAll('.appbar_user_avatar').forEach(el => el.textContent = initials);
+      const nameEl = document.getElementById('appbar_name');
+      if (nameEl) nameEl.textContent = _dUser.username;
+    }
+
+    // ─── Notificações ───
+    function gerarNotificacoes(txAll, metas, contas) {
+      const notifs = [];
+      const now = new Date();
+      const mesAtual = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+      // 1. Despesas > Receitas no mês
+      let recMes = 0, despMes = 0;
+      txAll.forEach(tx => {
+        if (!(tx.data_transacao||'').startsWith(mesAtual)) return;
+        if (tx.debitocredito) recMes  += parseFloat(tx.valor);
+        else                   despMes += parseFloat(tx.valor);
+      });
+      if (despMes > recMes && (recMes > 0 || despMes > 0)) {
+        notifs.push({ icon: 'warning', cor: 'var(--clr-expense)', titulo: 'Despesas acima das receitas', texto: `Você gastou R$ ${Number(despMes).toLocaleString('pt-BR',{minimumFractionDigits:2})} e recebeu R$ ${Number(recMes).toLocaleString('pt-BR',{minimumFractionDigits:2})} este mês.` });
+      }
+
+      // 2. Transações pendentes
+      const pendentes = txAll.filter(tx => !tx.efetividade).length;
+      if (pendentes > 0) {
+        notifs.push({ icon: 'pending_actions', cor: '#f59e0b', titulo: `${pendentes} transaç${pendentes > 1 ? 'ões pendentes' : 'ão pendente'}`, texto: 'Você tem lançamentos ainda não efetivados.' });
+      }
+
+      // 3. Metas perto do prazo (≤ 7 dias)
+      metas.forEach(m => {
+        if (!m.data_limite) return;
+        const diff = Math.ceil((new Date(m.data_limite + 'T12:00') - now) / 86400000);
+        if (diff >= 0 && diff <= 7) {
+          let d; try { d = JSON.parse(m.nome); } catch { d = { nome: m.nome }; }
+          notifs.push({ icon: 'event_upcoming', cor: '#a78bfa', titulo: `Meta "${d.nome}" vence em ${diff === 0 ? 'hoje' : diff + ' dias'}`, texto: `Progresso: R$ ${Number(m.saldo_atual||0).toLocaleString('pt-BR',{minimumFractionDigits:2})} de R$ ${Number(m.saldo_objetivo||0).toLocaleString('pt-BR',{minimumFractionDigits:2})}` });
+        }
+      });
+
+      // 4. Saldo zerado ou negativo
+      contas.forEach(c => {
+        const saldo = parseFloat((c.tipo||[]).find(t => t.saldo_objetivo===null)?.saldo_atual || 0);
+        if (saldo <= 0) {
+          notifs.push({ icon: 'account_balance_wallet', cor: 'var(--clr-expense)', titulo: `Saldo zerado: ${c.nome_banco}`, texto: 'Sua carteira está sem saldo disponível.' });
+        }
+      });
+
+      // 5. Sem notificações
+      if (!notifs.length) {
+        notifs.push({ icon: 'check_circle', cor: 'var(--clr-income)', titulo: 'Tudo em ordem!', texto: 'Não há alertas no momento.' });
+      }
+
+      return notifs;
+    }
+
+    function renderNotificacoes(notifs) {
+      const badge = document.getElementById('notif_badge');
+      const list  = document.getElementById('notif_list');
+      const temAlerta = notifs.some(n => n.icon === 'warning' || n.icon === 'pending_actions' || n.icon === 'event_upcoming' || n.icon === 'account_balance_wallet');
+      badge.style.display = temAlerta ? '' : 'none';
+
+      list.innerHTML = notifs.map(n => `
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--clr-surface-high);">
+          <span class="material-symbols-outlined icon-fill" style="color:${n.cor};font-size:22px;margin-top:2px;">${n.icon}</span>
+          <div>
+            <div style="font-weight:600;font-size:.9rem;color:var(--clr-on-surface);">${n.titulo}</div>
+            <div style="font-size:.8rem;color:var(--clr-on-surface-variant);margin-top:2px;">${n.texto}</div>
+          </div>
+        </div>`).join('');
+    }
+
+    // ─── Init ───
+    async function initDashboard() {
+      atualizarLabelMes();
+      const [contas, txAll, metas, cats] = await Promise.all([
+        dbGetContas(_dUser.id_cliente),
+        dbGetTodasTransacoes(_dUser.id_cliente),
+        dbGetMetas(_dUser.id_cliente),
+        dbGetCategorias()
+      ]);
+      // Salva cache para re-render na troca de mês
+      _dashCache.contas = contas;
+      _dashCache.txAll  = txAll;
+      _dashCache.metas  = metas;
+      popularSelectsDash(contas, cats);
+      renderDashboard(contas, txAll, metas);
+      renderNotificacoes(gerarNotificacoes(txAll, metas, contas));
+    }
+
+    initDashboard();
+  </script>
 
 </body>
 

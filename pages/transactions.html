@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 
 <head>
@@ -15,6 +15,11 @@
 </head>
 
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <header class="appbar">
     <div class="appbar_brand">
@@ -80,125 +85,8 @@
         <button class="filter-tab" data-tab>Pendentes</button>
       </div>
 
-      <!-- Group: Hoje -->
-      <div class="tx-group">
-        <div class="tx-group_date">Hoje — 25 mai</div>
-        <div class="tx-list">
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check done" title="Efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(251,146,60,.15);color:#fb923c;">
-              <span class="material-symbols-outlined icon-fill">restaurant</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">iFood</div>
-              <div class="tx-meta">Alimentação · Nubank</div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount expense">-R$ 45,90</span>
-            </div>
-          </div>
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check" title="Marcar como efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
-              <span class="material-symbols-outlined icon-fill">directions_car</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">Combustível</div>
-              <div class="tx-meta">Transporte · Carteira física <span class="tx-pill pending">Pendente</span></div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount expense pending">-R$ 180,00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Group: Ontem -->
-      <div class="tx-group">
-        <div class="tx-group_date">Ontem — 24 mai</div>
-        <div class="tx-list">
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check done" title="Efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
-              <span class="material-symbols-outlined icon-fill">payments</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">Salário</div>
-              <div class="tx-meta">Receita · Nubank</div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount income">+R$ 5.500,00</span>
-            </div>
-          </div>
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check done" title="Efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(52,211,153,.15);color:#34d399;">
-              <span class="material-symbols-outlined icon-fill">favorite</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">Farmácia</div>
-              <div class="tx-meta">Saúde · Carteira física</div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount expense">-R$ 62,00</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Group: 22 mai -->
-      <div class="tx-group">
-        <div class="tx-group_date">22 mai</div>
-        <div class="tx-list">
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check done" title="Efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(202,190,255,.12);color:#a78bfa;">
-              <span class="material-symbols-outlined icon-fill">shopping_bag</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">Amazon</div>
-              <div class="tx-meta">Compras · Nubank <span class="tx-pill parcel">3/12x</span></div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount expense">-R$ 239,90</span>
-              <span class="tx-parcel">total R$ 2.878,80</span>
-            </div>
-          </div>
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check done" title="Efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(56,189,248,.15);color:#38bdf8;">
-              <span class="material-symbols-outlined icon-fill">swap_horiz</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">Nubank → Poupança</div>
-              <div class="tx-meta">Transferência</div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount transfer">R$ 500,00</span>
-            </div>
-          </div>
-          <div class="tx-row" data-modal="modal_tx_detail">
-            <button class="tx-check done" title="Efetivada"><span
-                class="material-symbols-outlined">check</span></button>
-            <div class="tx-icon" style="background:rgba(249,115,22,.15);color:#f97316;">
-              <span class="material-symbols-outlined icon-fill">sports_esports</span>
-            </div>
-            <div class="tx-info">
-              <div class="tx-name">Steam</div>
-              <div class="tx-meta">Lazer · Nubank Crédito</div>
-            </div>
-            <div class="tx-right">
-              <span class="tx-amount card">-R$ 89,90</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Lista de transações dinâmica -->
+      <div id="tx_container"></div>
 
     </div>
   </main>
@@ -270,43 +158,35 @@
       <div class="modal-handle"></div>
       <div class="modal-header">
         <h2 class="modal-title">Nova Despesa</h2>
-        <button class="modal-close" data-close="modal_new_expense"><span
-            class="material-symbols-outlined">close</span></button>
+        <button class="modal-close" data-close="modal_new_expense"><span class="material-symbols-outlined">close</span></button>
       </div>
       <div class="modal-body">
         <div class="amount-field">
           <div class="amount-field_label">Valor</div>
           <div class="amount-field_wrap">
             <span class="amount-field_currency">R$</span>
-            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+            <input id="exp_valor" type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Descrição</label>
-          <input type="text" class="form-input" placeholder="Ex: iFood, Supermercado...">
+          <label class="form-label">Título</label>
+          <input id="exp_titulo" type="text" class="form-input" placeholder="Ex: iFood, Supermercado...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição (opcional)</label>
+          <input id="exp_descricao" type="text" class="form-input" placeholder="Observações...">
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-select">
-            <option>Alimentação</option>
-            <option>Transporte</option>
-            <option>Saúde</option>
-            <option>Lazer</option>
-            <option>Compras</option>
-            <option>Moradia</option>
-          </select>
+          <select id="exp_categoria" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Conta</label>
-          <select class="form-select">
-            <option>Conta Nubank</option>
-            <option>Poupança</option>
-            <option>Carteira física</option>
-          </select>
+          <select id="exp_conta" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Data</label>
-          <input type="date" class="form-input">
+          <input id="exp_data" type="date" class="form-input">
         </div>
         <label class="modal-checkbox-row">
           <input type="checkbox" id="cb_parcel2" data-toggle-parcel="parcel_row2">
@@ -315,37 +195,20 @@
         <div id="parcel_row2" class="parcel-row" style="display:none;">
           <div class="form-group">
             <label class="form-label">Parcelas</label>
-            <select class="form-select">
-              <option>2x</option>
-              <option>3x</option>
-              <option>4x</option>
-              <option>5x</option>
-              <option>6x</option>
-              <option>12x</option>
+            <select id="exp_parcelas" class="form-select">
+              <option value="2">2x</option><option value="3">3x</option>
+              <option value="4">4x</option><option value="5">5x</option>
+              <option value="6">6x</option><option value="12">12x</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Dia venc.</label>
-            <input type="number" class="form-input" placeholder="1-31" min="1" max="31">
-          </div>
         </div>
         <label class="modal-checkbox-row">
-          <input type="checkbox" id="cb_fixed2" data-toggle-fixed="fixed_extra2">
-          <span class="modal-checkbox-label">Conta fixa (mensal)</span>
-        </label>
-        <div id="fixed_extra2" class="fixed-extra" style="display:none;">
-          <div class="form-group">
-            <label class="form-label">Dia do vencimento</label>
-            <input type="number" class="form-input" placeholder="Ex: 15" min="1" max="31">
-          </div>
-        </div>
-        <label class="modal-checkbox-row">
-          <input type="checkbox" checked>
+          <input id="exp_efetivada" type="checkbox" checked>
           <span class="modal-checkbox-label">Marcar como efetivada</span>
         </label>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_expense">Cancelar</button>
-          <button class="btn-modal-primary">
+          <button id="btn_salvar_exp" class="btn-modal-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
           </button>
         </div>
@@ -359,49 +222,43 @@
       <div class="modal-handle"></div>
       <div class="modal-header">
         <h2 class="modal-title">Nova Receita</h2>
-        <button class="modal-close" data-close="modal_new_income"><span
-            class="material-symbols-outlined">close</span></button>
+        <button class="modal-close" data-close="modal_new_income"><span class="material-symbols-outlined">close</span></button>
       </div>
       <div class="modal-body">
         <div class="amount-field">
           <div class="amount-field_label">Valor</div>
           <div class="amount-field_wrap">
             <span class="amount-field_currency">R$</span>
-            <input type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
+            <input id="inc_valor" type="text" class="amount-field_input" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Descrição</label>
-          <input type="text" class="form-input" placeholder="Ex: Salário, Freelance...">
+          <label class="form-label">Título</label>
+          <input id="inc_titulo" type="text" class="form-input" placeholder="Ex: Salário, Freelance...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição (opcional)</label>
+          <input id="inc_descricao" type="text" class="form-input" placeholder="Observações...">
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-select">
-            <option>Salário</option>
-            <option>Freelance</option>
-            <option>Investimentos</option>
-            <option>Outros</option>
-          </select>
+          <select id="inc_categoria" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Conta</label>
-          <select class="form-select">
-            <option>Conta Nubank</option>
-            <option>Poupança</option>
-            <option>Carteira física</option>
-          </select>
+          <select id="inc_conta" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Data</label>
-          <input type="date" class="form-input">
+          <input id="inc_data" type="date" class="form-input">
         </div>
         <label class="modal-checkbox-row">
-          <input type="checkbox" checked>
+          <input id="inc_efetivada" type="checkbox" checked>
           <span class="modal-checkbox-label">Marcar como efetivada</span>
         </label>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_income">Cancelar</button>
-          <button class="btn-modal-primary">
+          <button id="btn_salvar_inc" class="btn-modal-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">check</span>Salvar
           </button>
         </div>
@@ -598,8 +455,323 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    const _txUser  = JSON.parse(localStorage.getItem('finsight-user') || '{}');
+    let _contas    = [];   // [{ conta, tipo }]
+    let _cats      = [];   // categoria rows
+    let _txAll     = [];   // todas as transações
+    let _txFiltro  = 'todas';
+    let _txSearch  = '';
+    let _txDetalhe = null; // transação aberta no modal de detalhe
+
+    function parseCat(raw) {
+      try { return JSON.parse(raw); } catch { return { nome: raw, icone: 'category', cor: '#7c5cfc' }; }
+    }
+    function fmtBRL(v) {
+      return Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtData(iso) {
+      if (!iso) return '';
+      const [y,m,d] = iso.split('-');
+      const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return `${parseInt(d)} ${meses[parseInt(m)-1]}`;
+    }
+    function hoje() { return new Date().toISOString().slice(0,10); }
+
+    // ─── Selects ───
+    function popularSelects() {
+      const contasValidas = _contas.filter(c => c.tipo && c.tipo.length);
+      const optsCat   = _cats.map(c => { const d = parseCat(c.nome_categoria); return `<option value="${c.id_categoria}">${d.nome}</option>`; }).join('');
+      const optsConta = contasValidas.map(c => {
+        const tp = getTipoPadrao(c);
+        return `<option value="${tp.id_tipo}">${c.nome_banco}</option>`;
+      }).join('');
+
+      // Se só há uma conta, não mostra placeholder — já seleciona direto
+      const semConta = contasValidas.length > 1 ? '<option value="" disabled selected>— selecione —</option>' : '';
+      const semCat   = '<option value="" disabled selected>— selecione —</option>';
+
+      ['exp_categoria','inc_categoria'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = semCat + optsCat;
+      });
+      ['exp_conta','inc_conta'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = semConta + optsConta;
+      });
+
+      // Datas padrão = hoje
+      ['exp_data','inc_data'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.value) el.value = hoje();
+      });
+    }
+
+    // ─── Render transações ───
+    function txFiltradas() {
+      return _txAll.filter(tx => {
+        const isCredito = tx.debitocredito;
+        if (_txFiltro === 'receitas'  && !isCredito) return false;
+        if (_txFiltro === 'despesas'  && isCredito)  return false;
+        if (_txFiltro === 'pendentes' && tx.efetividade) return false;
+        if (_txSearch) {
+          const q = _txSearch.toLowerCase();
+          if (!tx.titulo.toLowerCase().includes(q) && !(tx.descricao||'').toLowerCase().includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderTransacoes() {
+      const container = document.getElementById('tx_container');
+      const lista = txFiltradas();
+
+      // Totais do mês corrente
+      const now = new Date();
+      const mesAtual = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+      let totalRec = 0, totalDesp = 0;
+      _txAll.forEach(tx => {
+        if ((tx.data_transacao||'').startsWith(mesAtual)) {
+          if (tx.debitocredito) totalRec  += parseFloat(tx.valor);
+          else                   totalDesp += parseFloat(tx.valor);
+        }
+      });
+      document.querySelector('.summary-card.income .summary-card_amount').textContent = 'R$ ' + fmtBRL(totalRec);
+      document.querySelector('.summary-card.expense .summary-card_amount').textContent = 'R$ ' + fmtBRL(totalDesp);
+
+      if (!lista.length) {
+        container.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:40px 0;">Nenhuma transação encontrada.</p>';
+        return;
+      }
+
+      // Agrupa por data
+      const grupos = {};
+      lista.forEach(tx => {
+        const d = tx.data_transacao || '0000-00-00';
+        if (!grupos[d]) grupos[d] = [];
+        grupos[d].push(tx);
+      });
+
+      const dataHoje   = hoje();
+      const dataOntem  = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+
+      container.innerHTML = Object.entries(grupos)
+        .sort(([a],[b]) => b.localeCompare(a))
+        .map(([data, txs]) => {
+          let label;
+          if (data === dataHoje)  label = `Hoje — ${fmtData(data)}`;
+          else if (data === dataOntem) label = `Ontem — ${fmtData(data)}`;
+          else label = fmtData(data);
+
+          const rows = txs.map(tx => {
+            const catData  = parseCat(tx.categoria?.nome_categoria || '{}');
+            const cor      = catData.cor   || '#7c5cfc';
+            const icone    = catData.icone || 'swap_horiz';
+            const isCredit = tx.debitocredito;
+            const amtClass = isCredit ? 'income' : (tx.efetividade ? 'expense' : 'expense pending');
+            const amtSign  = isCredit ? '+' : '-';
+            const checkCls = tx.efetividade ? 'tx-check done' : 'tx-check';
+            const contaNome = tx.tipo?.conta?.nome_banco || '';
+            const pendPill  = !tx.efetividade ? '<span class="tx-pill pending">Pendente</span>' : '';
+            const parcelPill = tx.quantidade_parcelas ? `<span class="tx-pill parcel">${tx.quantidade_parcelas}x</span>` : '';
+
+            return `
+              <div class="tx-row" data-id="${tx.id_transacao}" onclick="abrirDetalhe(${tx.id_transacao})">
+                <button class="tx-check ${tx.efetividade ? 'done' : ''}" title="${tx.efetividade ? 'Efetivada' : 'Pendente'}" onclick="toggleEfetividade(event,${tx.id_transacao},${!tx.efetividade})">
+                  <span class="material-symbols-outlined">check</span>
+                </button>
+                <div class="tx-icon" style="background:${cor}22;color:${cor};">
+                  <span class="material-symbols-outlined icon-fill">${icone}</span>
+                </div>
+                <div class="tx-info">
+                  <div class="tx-name">${tx.titulo}</div>
+                  <div class="tx-meta">${catData.nome || ''} · ${contaNome} ${pendPill}${parcelPill}</div>
+                </div>
+                <div class="tx-right">
+                  <span class="tx-amount ${amtClass}">${amtSign}R$ ${fmtBRL(tx.valor)}</span>
+                </div>
+              </div>`;
+          }).join('');
+
+          return `<div class="tx-group"><div class="tx-group_date">${label}</div><div class="tx-list">${rows}</div></div>`;
+        }).join('');
+    }
+
+    // ─── Detalhe ───
+    function abrirDetalhe(id) {
+      _txDetalhe = _txAll.find(t => t.id_transacao === id);
+      if (!_txDetalhe) return;
+      const tx      = _txDetalhe;
+      const catData = parseCat(tx.categoria?.nome_categoria || '{}');
+      const cor     = catData.cor   || '#7c5cfc';
+      const icone   = catData.icone || 'swap_horiz';
+      const isCredit = tx.debitocredito;
+
+      document.querySelector('.tx-detail-icon-wrap').style.background = cor + '22';
+      document.querySelector('.tx-detail-icon-wrap').style.color = cor;
+      document.querySelector('.tx-detail-icon-wrap .material-symbols-outlined').textContent = icone;
+      document.querySelector('.tx-detail-amount').textContent = (isCredit ? '+' : '-') + 'R$ ' + fmtBRL(tx.valor);
+      document.querySelector('.tx-detail-amount').className = 'tx-detail-amount ' + (isCredit ? 'income' : 'expense');
+      document.querySelector('.tx-detail-name').textContent = tx.titulo;
+
+      const rows = document.querySelectorAll('.tx-detail-row .tx-detail-row-value');
+      if (rows[0]) rows[0].textContent = tx.data_transacao ? new Date(tx.data_transacao + 'T12:00:00').toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' }) : '';
+      if (rows[1]) rows[1].textContent = catData.nome || '—';
+      if (rows[2]) rows[2].textContent = tx.tipo?.conta?.nome_banco || '—';
+      if (rows[3]) {
+        rows[3].textContent = tx.efetividade ? 'Efetivada' : 'Pendente';
+        rows[3].style.color = tx.efetividade ? 'var(--clr-income)' : 'var(--clr-expense)';
+      }
+      openModal('modal_tx_detail');
+    }
+
+    async function toggleEfetividade(e, id, novoValor) {
+      e.stopPropagation();
+      try {
+        await dbUpdateTransacao(id, { efetividade: novoValor });
+        const tx = _txAll.find(t => t.id_transacao === id);
+        if (tx) tx.efetividade = novoValor;
+        renderTransacoes();
+      } catch(err) { alert('Erro: ' + err.message); }
+    }
+
+    // ─── Excluir ───
+    document.querySelector('#modal_confirm_delete .btn-modal-danger').addEventListener('click', async function () {
+      if (!_txDetalhe) return;
+      this.disabled = true;
+      try {
+        const tx = _txDetalhe;
+        // Reverte saldo
+        const delta = tx.debitocredito ? -parseFloat(tx.valor) : parseFloat(tx.valor);
+        await dbUpdateSaldo(tx.id_tipo, delta);
+        await dbDeleteTransacao(tx.id_transacao);
+        closeModal('modal_confirm_delete');
+        _txDetalhe = null;
+        await carregarTransacoes();
+      } catch(e) { alert('Erro ao excluir: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── Salvar Despesa ───
+    document.getElementById('btn_salvar_exp').addEventListener('click', async function () {
+      const valor     = parseFloat(document.getElementById('exp_valor').value.replace(',','.'));
+      const titulo    = document.getElementById('exp_titulo').value.trim();
+      const descricao = document.getElementById('exp_descricao').value.trim();
+      const id_cat    = parseInt(document.getElementById('exp_categoria').value);
+      const id_tipo   = parseInt(document.getElementById('exp_conta').value);
+      const data      = document.getElementById('exp_data').value;
+      const efetivada = document.getElementById('exp_efetivada').checked;
+      const parcelas  = document.getElementById('cb_parcel2').checked
+        ? parseInt(document.getElementById('exp_parcelas').value) : null;
+
+      if (!valor || !titulo || !id_cat || !id_tipo || !data) { alert('Preencha todos os campos obrigatórios.'); return; }
+
+      this.disabled = true;
+      try {
+        await dbAddTransacao({ valor, data_transacao: data, descricao, titulo, id_categoria: id_cat,
+          quantidade_parcelas: parcelas, id_tipo, debitocredito: false, efetividade: efetivada,
+          data_efetividade: efetivada ? data : null });
+        // Sempre subtrai do saldo (efetivada ou não)
+        await dbUpdateSaldo(id_tipo, -valor);
+        closeModal('modal_new_expense');
+        limparFormExp();
+        await carregarTransacoes();
+      } catch(e) { alert('Erro ao salvar: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    function limparFormExp() {
+      ['exp_valor','exp_titulo','exp_descricao'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('exp_data').value = hoje();
+      document.getElementById('exp_efetivada').checked = true;
+    }
+
+    // ─── Salvar Receita ───
+    document.getElementById('btn_salvar_inc').addEventListener('click', async function () {
+      const valor     = parseFloat(document.getElementById('inc_valor').value.replace(',','.'));
+      const titulo    = document.getElementById('inc_titulo').value.trim();
+      const descricao = document.getElementById('inc_descricao').value.trim();
+      const id_cat    = parseInt(document.getElementById('inc_categoria').value);
+      const id_tipo   = parseInt(document.getElementById('inc_conta').value);
+      const data      = document.getElementById('inc_data').value;
+      const efetivada = document.getElementById('inc_efetivada').checked;
+
+      if (!valor || !titulo || !id_cat || !id_tipo || !data) { alert('Preencha todos os campos obrigatórios.'); return; }
+
+      this.disabled = true;
+      try {
+        await dbAddTransacao({ valor, data_transacao: data, descricao, titulo, id_categoria: id_cat,
+          quantidade_parcelas: null, id_tipo, debitocredito: true, efetividade: efetivada,
+          data_efetividade: efetivada ? data : null });
+        // Sempre soma ao saldo (efetivada ou não)
+        await dbUpdateSaldo(id_tipo, valor);
+        closeModal('modal_new_income');
+        limparFormInc();
+        await carregarTransacoes();
+      } catch(e) { alert('Erro ao salvar: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    function limparFormInc() {
+      ['inc_valor','inc_titulo','inc_descricao'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('inc_data').value = hoje();
+      document.getElementById('inc_efetivada').checked = true;
+    }
+
+    // ─── FAB type cards ───
+    document.querySelectorAll('.fab-type-card').forEach(card => {
+      card.addEventListener('click', function () {
+        const target = this.dataset.target;
+        closeModal('modal_fab_type');
+        if (target) openModal(target);
+      });
+    });
+
+    // ─── Filtros ───
+    document.querySelectorAll('.filter-tab').forEach((btn, i) => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        _txFiltro = ['todas','receitas','despesas','transferências','pendentes'][i];
+        renderTransacoes();
+      });
+    });
+
+    document.querySelector('.search-input').addEventListener('input', function () {
+      _txSearch = this.value.trim();
+      renderTransacoes();
+    });
+
+    // ─── Carga inicial ───
+    async function carregarTransacoes() {
+      _txAll = await dbGetTodasTransacoes(_txUser.id_cliente);
+      renderTransacoes();
+    }
+
+    async function init() {
+      [_contas, _cats] = await Promise.all([
+        dbGetContas(_txUser.id_cliente),
+        dbGetCategorias()
+      ]);
+      popularSelects();
+      await carregarTransacoes();
+
+      // Avatar appbar
+      if (_txUser.username) {
+        document.querySelectorAll('.appbar_user_avatar').forEach(el => {
+          el.textContent = _txUser.username.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        });
+        const nameEl = document.querySelector('.appbar_user_name');
+        if (nameEl) nameEl.textContent = _txUser.username;
+      }
+    }
+
+    init();
+  </script>
 
 </body>
 

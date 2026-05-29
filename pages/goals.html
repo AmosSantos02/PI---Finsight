@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="../css/modals.css">
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <header class="appbar">
     <div class="appbar_brand">
@@ -46,107 +51,7 @@
         <button class="filter-tab" data-tab>Concluídas</button>
       </div>
 
-      <div class="goal-list">
-
-        <div class="goal-card">
-          <div class="goal-card_header">
-            <div class="goal-card_left">
-              <div class="goal-card_icon" style="background:rgba(124,92,252,.15);color:#a78bfa;">
-                <span class="material-symbols-outlined">flight</span>
-              </div>
-              <div>
-                <div class="goal-card_name">Viagem Europa</div>
-                <span class="goal-card_status active">Em andamento</span>
-              </div>
-            </div>
-            <button class="goal-card_edit" data-modal="modal_edit_goal">
-              <span class="material-symbols-outlined">edit</span>
-            </button>
-          </div>
-          <div class="goal-card_amounts">
-            <span class="goal-card_current">R$ 4.200</span>
-            <span class="goal-card_sep">de</span>
-            <span class="goal-card_target">R$ 15.000</span>
-          </div>
-          <div class="goal-card_pct-row"><span class="goal-card_pct">28%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:28%"></div></div>
-          <div class="goal-card_footer">
-            <button class="btn btn-secondary">
-              <span class="material-symbols-outlined">add_circle</span>Aporte
-            </button>
-            <button class="btn btn-ghost" data-modal="modal_confirm_delete_goal">
-              <span class="material-symbols-outlined">delete</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="goal-card">
-          <div class="goal-card_header">
-            <div class="goal-card_left">
-              <div class="goal-card_icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
-                <span class="material-symbols-outlined">shield</span>
-              </div>
-              <div>
-                <div class="goal-card_name">Reserva de emergência</div>
-                <span class="goal-card_status active">Em andamento</span>
-              </div>
-            </div>
-            <button class="goal-card_edit" data-modal="modal_edit_goal">
-              <span class="material-symbols-outlined">edit</span>
-            </button>
-          </div>
-          <div class="goal-card_amounts">
-            <span class="goal-card_current">R$ 8.700</span>
-            <span class="goal-card_sep">de</span>
-            <span class="goal-card_target">R$ 10.000</span>
-          </div>
-          <div class="goal-card_pct-row"><span class="goal-card_pct">87%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:87%"></div></div>
-          <div class="goal-card_footer">
-            <button class="btn btn-secondary">
-              <span class="material-symbols-outlined">add_circle</span>Aporte
-            </button>
-            <button class="btn btn-ghost" data-modal="modal_confirm_delete_goal">
-              <span class="material-symbols-outlined">delete</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="goal-card">
-          <div class="goal-card_header">
-            <div class="goal-card_left">
-              <div class="goal-card_icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
-                <span class="material-symbols-outlined">laptop_mac</span>
-              </div>
-              <div>
-                <div class="goal-card_name">Notebook novo</div>
-                <span class="goal-card_status done">Concluída</span>
-              </div>
-            </div>
-            <button class="goal-card_edit" data-modal="modal_edit_goal">
-              <span class="material-symbols-outlined">edit</span>
-            </button>
-          </div>
-          <div class="goal-card_amounts">
-            <span class="goal-card_current">R$ 4.500</span>
-            <span class="goal-card_sep">de</span>
-            <span class="goal-card_target">R$ 4.500</span>
-          </div>
-          <div class="goal-card_pct-row">
-            <span class="goal-card_pct" style="color:var(--income);">100%</span>
-          </div>
-          <div class="progress-track"><div class="progress-fill done" style="width:100%"></div></div>
-          <div class="goal-card_footer">
-            <button class="btn btn-secondary" disabled>
-              <span class="material-symbols-outlined">check_circle</span>Concluída
-            </button>
-            <button class="btn btn-ghost" data-modal="modal_confirm_delete_goal">
-              <span class="material-symbols-outlined">delete</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
+      <div class="goal-list" id="goal_list"></div>
 
     </div>
   </main>
@@ -186,25 +91,29 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Nome da meta</label>
-          <input type="text" class="form-input" placeholder="Ex: Viagem Europa...">
+          <input id="goal_nome" type="text" class="form-input" placeholder="Ex: Viagem Europa...">
         </div>
         <div class="form-group">
           <label class="form-label">Valor alvo</label>
           <div class="input-wrap">
             <span class="input-prefix">R$</span>
-            <input type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
+            <input id="goal_objetivo" type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Valor inicial (opcional)</label>
           <div class="input-wrap">
             <span class="input-prefix">R$</span>
-            <input type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
+            <input id="goal_atual" type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Prazo</label>
-          <input type="date" class="form-input">
+          <label class="form-label">Prazo (opcional)</label>
+          <input id="goal_prazo" type="date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Conta vinculada</label>
+          <select id="goal_conta" class="form-select"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Ícone</label>
@@ -225,7 +134,7 @@
         </div>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_goal">Cancelar</button>
-          <button class="btn-modal-primary">
+          <button id="btn_criar_goal" class="btn-modal-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>Criar meta
           </button>
         </div>
@@ -313,8 +222,183 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    const _gUser  = JSON.parse(localStorage.getItem('finsight-user') || '{}');
+    const GOAL_COLORS = ['#a78bfa','#60a5fa','#22c55e','#fb923c','#f87171','#34d399'];
+    let _goalFiltro  = 'todas';
+    let _goalParaDeletar = null;
+    let _selGoalIcone = 'flight';
+
+    function fmtBRL(v) {
+      return Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+    function parseMeta(raw) {
+      try { return JSON.parse(raw); } catch { return { nome: raw, icone: 'ads_click' }; }
+    }
+
+    function renderGoals(metas) {
+      const list = document.getElementById('goal_list');
+      const filtradas = metas.filter(m => {
+        const pct = Math.min(100, Math.round((parseFloat(m.saldo_atual)||0) / (parseFloat(m.saldo_objetivo)||1) * 100));
+        const done = pct >= 100;
+        if (_goalFiltro === 'andamento') return !done;
+        if (_goalFiltro === 'concluidas') return done;
+        return true;
+      });
+
+      if (!filtradas.length) {
+        list.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:40px 0;">Nenhuma meta encontrada.</p>';
+        return;
+      }
+
+      list.innerHTML = filtradas.map((m, i) => {
+        const d      = parseMeta(m.nome);
+        const atual  = parseFloat(m.saldo_atual)    || 0;
+        const alvo   = parseFloat(m.saldo_objetivo) || 1;
+        const pct    = Math.min(100, Math.round(atual / alvo * 100));
+        const done   = pct >= 100;
+        const cor    = GOAL_COLORS[i % GOAL_COLORS.length];
+        const prazo  = m.data_limite ? new Date(m.data_limite + 'T12:00').toLocaleDateString('pt-BR') : null;
+
+        return `
+          <div class="goal-card">
+            <div class="goal-card_header">
+              <div class="goal-card_left">
+                <div class="goal-card_icon" style="background:${cor}22;color:${cor};">
+                  <span class="material-symbols-outlined">${d.icone || 'ads_click'}</span>
+                </div>
+                <div>
+                  <div class="goal-card_name">${d.nome}</div>
+                  <span class="goal-card_status ${done ? 'done' : 'active'}">${done ? 'Concluída' : (prazo ? 'Até ' + prazo : 'Em andamento')}</span>
+                </div>
+              </div>
+            </div>
+            <div class="goal-card_amounts">
+              <span class="goal-card_current">R$ ${fmtBRL(atual)}</span>
+              <span class="goal-card_sep">de</span>
+              <span class="goal-card_target">R$ ${fmtBRL(alvo)}</span>
+            </div>
+            <div class="goal-card_pct-row">
+              <span class="goal-card_pct" ${done ? 'style="color:var(--clr-income);"' : ''}>${pct}%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill ${done ? 'done' : ''}" style="width:${pct}%;background:${cor};"></div>
+            </div>
+            <div class="goal-card_footer">
+              ${done
+                ? `<button class="btn btn-secondary" disabled><span class="material-symbols-outlined">check_circle</span>Concluída</button>`
+                : `<button class="btn btn-secondary" onclick="abrirAporte(${m.id_tipo}, ${atual}, ${alvo})">
+                     <span class="material-symbols-outlined">add_circle</span>Aporte
+                   </button>`
+              }
+              <button class="btn btn-ghost" onclick="pedirExcluirGoal(${m.id_tipo})">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function carregarGoals() {
+      const metas = await dbGetMetas(_gUser.id_cliente);
+      renderGoals(metas);
+    }
+
+    // ─── Aporte ───
+    function abrirAporte(id_tipo, saldo_atual, saldo_objetivo) {
+      const valor = parseFloat(prompt('Valor do aporte (R$):'));
+      if (!valor || isNaN(valor) || valor <= 0) return;
+      const novo = Math.min(saldo_objetivo, saldo_atual + valor);
+      dbAporteMeta(id_tipo, novo)
+        .then(carregarGoals)
+        .catch(e => alert('Erro: ' + e.message));
+    }
+
+    // ─── Excluir ───
+    function pedirExcluirGoal(id_tipo) {
+      _goalParaDeletar = id_tipo;
+      openModal('modal_confirm_delete_goal');
+    }
+    document.querySelector('#modal_confirm_delete_goal .btn-modal-danger').addEventListener('click', async function () {
+      if (!_goalParaDeletar) return;
+      this.disabled = true;
+      try {
+        await dbDeleteMeta(_goalParaDeletar);
+        _goalParaDeletar = null;
+        closeModal('modal_confirm_delete_goal');
+        await carregarGoals();
+      } catch(e) { alert('Erro: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── Filtros ───
+    document.querySelectorAll('.filter-tab').forEach((btn, i) => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        _goalFiltro = ['todas','andamento','concluidas'][i];
+        dbGetMetas(_gUser.id_cliente).then(renderGoals);
+      });
+    });
+
+    // ─── Seleção de ícone no modal ───
+    document.querySelectorAll('#modal_new_goal .icon-opt').forEach(opt => {
+      opt.addEventListener('click', function () {
+        document.querySelectorAll('#modal_new_goal .icon-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        _selGoalIcone = this.dataset.icon;
+      });
+    });
+
+    // ─── Criar meta ───
+    document.getElementById('btn_criar_goal').addEventListener('click', async function () {
+      const nome     = document.getElementById('goal_nome').value.trim();
+      const objetivo = parseFloat(document.getElementById('goal_objetivo').value.replace(',','.'));
+      const atual    = parseFloat(document.getElementById('goal_atual').value.replace(',','.')) || 0;
+      const prazo    = document.getElementById('goal_prazo').value || null;
+      const id_conta = parseInt(document.getElementById('goal_conta').value);
+
+      if (!nome || !objetivo || !id_conta) { alert('Preencha nome, valor alvo e conta.'); return; }
+
+      this.disabled = true;
+      const nomeJson = JSON.stringify({ nome, icone: _selGoalIcone });
+      try {
+        await dbAddMeta(id_conta, nomeJson, objetivo, atual, prazo);
+        document.getElementById('goal_nome').value      = '';
+        document.getElementById('goal_objetivo').value  = '';
+        document.getElementById('goal_atual').value     = '';
+        document.getElementById('goal_prazo').value     = '';
+        closeModal('modal_new_goal');
+        await carregarGoals();
+      } catch(e) { alert('Erro ao criar: ' + e.message); }
+      finally { this.disabled = false; }
+    });
+
+    // ─── Init ───
+    async function initGoals() {
+      const contas = await dbGetContas(_gUser.id_cliente);
+      const sel = document.getElementById('goal_conta');
+      sel.innerHTML = contas.length
+        ? contas.map(c => `<option value="${c.id_conta}">${c.nome_banco}</option>`).join('')
+        : '<option value="" disabled>Nenhuma conta cadastrada</option>';
+
+      if (_gUser.username) {
+        document.querySelectorAll('.appbar_user_avatar').forEach(el => {
+          el.textContent = _gUser.username.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+        });
+        const nameEl = document.querySelector('.appbar_user_name');
+        if (nameEl) nameEl.textContent = _gUser.username;
+      }
+
+      await carregarGoals();
+    }
+
+    initGoals();
+  </script>
 
 </body>
 </html>

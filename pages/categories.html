@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="dark" lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="../css/modals.css">
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('finsight-session') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
 
   <header class="appbar">
     <div class="appbar_brand">
@@ -56,117 +61,7 @@
         </div>
       </div>
 
-      <div class="category-grid">
-
-        <div class="category-card">
-          <div class="category-card_header">
-            <div class="category-card_icon" style="background:rgba(251,146,60,.15);color:#fb923c;">
-              <span class="material-symbols-outlined">restaurant</span>
-            </div>
-            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
-          </div>
-          <div>
-            <div class="category-card_name">Alimentação</div>
-            <div class="category-card_count">12 transações</div>
-          </div>
-          <div class="category-card_footer">
-            <button class="category-card_edit" data-modal="modal_new_category">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-        <div class="category-card">
-          <div class="category-card_header">
-            <div class="category-card_icon" style="background:rgba(96,165,250,.15);color:#60a5fa;">
-              <span class="material-symbols-outlined">sports_esports</span>
-            </div>
-            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
-          </div>
-          <div>
-            <div class="category-card_name">Lazer</div>
-            <div class="category-card_count">5 transações</div>
-          </div>
-          <div class="category-card_footer">
-            <button class="category-card_edit" data-modal="modal_new_category">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-        <div class="category-card">
-          <div class="category-card_header">
-            <div class="category-card_icon" style="background:rgba(52,211,153,.15);color:#34d399;">
-              <span class="material-symbols-outlined">favorite</span>
-            </div>
-            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
-          </div>
-          <div>
-            <div class="category-card_name">Saúde</div>
-            <div class="category-card_count">3 transações</div>
-          </div>
-          <div class="category-card_footer">
-            <button class="category-card_edit" data-modal="modal_new_category">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-        <div class="category-card">
-          <div class="category-card_header">
-            <div class="category-card_icon" style="background:rgba(34,197,94,.15);color:#22c55e;">
-              <span class="material-symbols-outlined">payments</span>
-            </div>
-            <span class="category-card_badge" style="background:var(--income-dim);color:var(--income);">Receita</span>
-          </div>
-          <div>
-            <div class="category-card_name">Salário</div>
-            <div class="category-card_count">1 transação</div>
-          </div>
-          <div class="category-card_footer">
-            <button class="category-card_edit" data-modal="modal_new_category">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-        <div class="category-card">
-          <div class="category-card_header">
-            <div class="category-card_icon" style="background:rgba(202,190,255,.12);color:#a78bfa;">
-              <span class="material-symbols-outlined">directions_car</span>
-            </div>
-            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
-          </div>
-          <div>
-            <div class="category-card_name">Transporte</div>
-            <div class="category-card_count">8 transações</div>
-          </div>
-          <div class="category-card_footer">
-            <button class="category-card_edit" data-modal="modal_new_category">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-        <div class="category-card">
-          <div class="category-card_header">
-            <div class="category-card_icon" style="background:rgba(249,115,22,.12);color:#fb923c;">
-              <span class="material-symbols-outlined">shopping_bag</span>
-            </div>
-            <span class="category-card_badge" style="background:var(--expense-dim);color:var(--expense);">Despesa</span>
-          </div>
-          <div>
-            <div class="category-card_name">Compras</div>
-            <div class="category-card_count">7 transações</div>
-          </div>
-          <div class="category-card_footer">
-            <button class="category-card_edit" data-modal="modal_new_category">
-              <span class="material-symbols-outlined">edit</span>Editar
-            </button>
-          </div>
-        </div>
-
-      </div>
+      <div class="category-grid" id="category_grid"></div>
 
     </div>
   </main>
@@ -256,7 +151,7 @@
         </div>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_category">Cancelar</button>
-          <button class="btn-modal-primary">
+          <button id="btn_criar_cat" class="btn-modal-primary">
             <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>Criar
           </button>
         </div>
@@ -264,7 +159,144 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/supabase.js"></script>
   <script src="../js/modals.js"></script>
   <script src="../js/app.js"></script>
+  <script>
+    // Categoria é salva como JSON em nome_categoria para preservar ícone/cor/tipo
+    function parseCat(raw) {
+      try { return JSON.parse(raw); } catch { return { nome: raw, icone: 'category', cor: '#7c5cfc', tipo: 'expense' }; }
+    }
+
+    let _catFiltro = 'todas';
+
+    function renderCategorias(cats) {
+      const grid = document.getElementById('category_grid');
+      const visiveis = cats.filter(c => {
+        const d = parseCat(c.nome_categoria);
+        if (_catFiltro === 'receita') return d.tipo === 'income';
+        if (_catFiltro === 'despesa') return d.tipo === 'expense';
+        return true;
+      });
+
+      if (!visiveis.length) {
+        grid.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:32px 0;grid-column:1/-1;">Nenhuma categoria encontrada.</p>';
+        return;
+      }
+
+      grid.innerHTML = visiveis.map(c => {
+        const d = parseCat(c.nome_categoria);
+        const isIncome = d.tipo === 'income';
+        const badgeBg  = isIncome ? 'var(--income-dim)' : 'var(--expense-dim)';
+        const badgeClr = isIncome ? 'var(--income)'     : 'var(--expense)';
+        const badgeTxt = isIncome ? 'Receita'           : 'Despesa';
+        return `
+          <div class="category-card">
+            <div class="category-card_header">
+              <div class="category-card_icon" style="background:${d.cor}22;color:${d.cor};">
+                <span class="material-symbols-outlined">${d.icone}</span>
+              </div>
+              <span class="category-card_badge" style="background:${badgeBg};color:${badgeClr};">${badgeTxt}</span>
+            </div>
+            <div>
+              <div class="category-card_name">${d.nome}</div>
+            </div>
+            <div class="category-card_footer">
+              <button class="category-card_edit" onclick="excluirCategoria(${c.id_categoria}, '${d.nome.replace(/'/g,"\\'")}')">
+                <span class="material-symbols-outlined">delete</span>Excluir
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    let _todasCats = [];
+
+    async function carregarCategorias() {
+      _todasCats = await dbGetCategorias();
+      renderCategorias(_todasCats);
+    }
+
+    async function excluirCategoria(id, nome) {
+      if (!confirm(`Excluir a categoria "${nome}"?`)) return;
+      try {
+        await dbDeleteCategoria(id);
+        await carregarCategorias();
+      } catch(e) { alert('Erro ao excluir: ' + e.message); }
+    }
+
+    // Filtro por tabs
+    document.querySelectorAll('.filter-tab').forEach((btn, i) => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        _catFiltro = ['todas','receita','despesa'][i];
+        renderCategorias(_todasCats);
+      });
+    });
+
+    // Estado do modal (ícone/cor/tipo selecionados)
+    let _selIcone = 'restaurant';
+    let _selCor   = '#7c5cfc';
+    let _selTipo  = 'expense';
+
+    document.querySelectorAll('.type-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        _selTipo = this.dataset.type;
+        atualizarPreview();
+      });
+    });
+    document.querySelectorAll('.icon-opt').forEach(opt => {
+      opt.addEventListener('click', function () {
+        document.querySelectorAll('.icon-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        _selIcone = this.dataset.icon;
+        atualizarPreview();
+      });
+    });
+    document.querySelectorAll('.color-opt').forEach(opt => {
+      opt.addEventListener('click', function () {
+        document.querySelectorAll('.color-opt').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        _selCor = this.dataset.color;
+        atualizarPreview();
+      });
+    });
+    document.getElementById('cat_name').addEventListener('input', atualizarPreview);
+
+    function atualizarPreview() {
+      const nome = document.getElementById('cat_name').value || 'Nome da categoria';
+      document.getElementById('preview_name').textContent   = nome;
+      document.getElementById('preview_icon').textContent   = _selIcone;
+      document.getElementById('preview_icon').style.color   = _selCor;
+      document.getElementById('preview_box').style.background = _selCor + '22';
+      const badge = document.getElementById('preview_badge');
+      badge.textContent = _selTipo === 'income' ? 'Receita' : 'Despesa';
+      badge.style.background = _selTipo === 'income' ? 'var(--income-dim)' : 'var(--expense-dim)';
+      badge.style.color      = _selTipo === 'income' ? 'var(--income)'     : 'var(--expense)';
+    }
+
+    document.getElementById('btn_criar_cat').addEventListener('click', async function () {
+      const nome = document.getElementById('cat_name').value.trim();
+      if (!nome) { alert('Informe um nome para a categoria.'); return; }
+
+      this.disabled = true;
+      const payload = JSON.stringify({ nome, icone: _selIcone, cor: _selCor, tipo: _selTipo });
+      try {
+        await dbAddCategoria(payload);
+        document.getElementById('cat_name').value = '';
+        closeModal('modal_new_category');
+        await carregarCategorias();
+      } catch(e) { alert('Erro ao criar: ' + e.message); }
+      finally {
+        this.disabled = false;
+      }
+    });
+
+    carregarCategorias();
+  </script>
 </body>
 </html>
