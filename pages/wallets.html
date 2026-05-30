@@ -51,26 +51,13 @@
         </div>
       </div>
 
-      <!-- Adicionar carteira inline -->
-      <div class="wallet-add-card">
-        <div class="wallet-add-card_title" style="display:flex;align-items:center;gap:6px;">
-          <span class="material-symbols-outlined">add_card</span>
-          Nova carteira
-        </div>
-        <div class="wallet-add-card_fields" style="display:flex;flex-direction:column;gap:10px;">
-          <input id="wallet_nome" type="text" class="form-input" placeholder="Nome (ex: Nubank, Poupança...)">
-          <div class="input-wrap">
-            <span class="input-prefix">R$</span>
-            <input id="wallet_saldo" type="text" class="form-input input-mono" placeholder="0,00" inputmode="decimal">
-          </div>
-        </div>
-        <button id="btn_criar_wallet" class="btn btn-primary" style="width:100%;margin-top:8px;">
-          <span class="material-symbols-outlined">add</span>Adicionar carteira
-        </button>
-      </div>
+      <!-- Botão nova carteira -->
+      <button class="btn btn-primary" style="width:100%;margin-bottom:20px;" data-modal="modal_new_wallet">
+        <span class="material-symbols-outlined">add_card</span>Nova carteira
+      </button>
 
       <!-- Wallet list -->
-      <div class="wallet-list" id="wallet_list" style="margin-top:20px;"></div>
+      <div class="wallet-list" id="wallet_list"></div>
 
     </div>
   </main>
@@ -121,32 +108,17 @@
         </div>
         <div class="form-group">
           <label class="form-label">Tipo</label>
-          <select class="form-select">
+          <select id="wallet_tipo" class="form-select">
             <option>Conta corrente</option>
             <option>Poupança</option>
             <option>Dinheiro físico</option>
             <option>Investimento</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Cor</label>
-          <div class="wallet-color-grid">
-            <div class="wallet-color-opt selected" data-color="#7c5cfc" style="background:#7c5cfc;"></div>
-            <div class="wallet-color-opt" data-color="#22c55e" style="background:#22c55e;"></div>
-            <div class="wallet-color-opt" data-color="#f97316" style="background:#f97316;"></div>
-            <div class="wallet-color-opt" data-color="#60a5fa" style="background:#60a5fa;"></div>
-            <div class="wallet-color-opt" data-color="#ef4444" style="background:#ef4444;"></div>
-            <div class="wallet-color-opt" data-color="#34d399" style="background:#34d399;"></div>
-          </div>
-        </div>
-        <label class="modal-checkbox-row">
-          <input type="checkbox">
-          <span class="modal-checkbox-label">Definir como carteira principal</span>
-        </label>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_new_wallet">Cancelar</button>
           <button id="btn_criar_wallet" class="btn-modal-primary">
-            <span class="material-symbols-outlined" style="font-size:18px;">add_card</span>Criar
+            <span class="material-symbols-outlined" style="font-size:18px;">add_card</span>Criar carteira
           </button>
         </div>
       </div>
@@ -210,11 +182,11 @@
         <div class="delete-confirm-wrap">
           <span class="material-symbols-outlined delete-icon-big">delete_forever</span>
           <h2 class="delete-confirm-title">Excluir carteira?</h2>
-          <p class="delete-confirm-text">Todas as transações associadas a esta carteira também serão removidas. Esta ação não pode ser desfeita.</p>
+          <p class="delete-confirm-text">A carteira <strong id="delete_wallet_nome" style="color:var(--t1);"></strong> e todas as transações associadas serão removidas permanentemente.</p>
         </div>
         <div class="modal-actions">
           <button class="btn-modal-cancel" data-close="modal_delete_wallet">Cancelar</button>
-          <button class="btn-modal-danger">
+          <button id="btn_confirmar_excluir_wallet" class="btn-modal-danger">
             <span class="material-symbols-outlined" style="font-size:16px;">delete_forever</span>Excluir
           </button>
         </div>
@@ -287,33 +259,55 @@
       renderWallets(contas);
     }
 
-    async function confirmarExcluirWallet(id_conta, nome) {
-      if (!confirm(`Excluir a carteira "${nome}"? Todas as transações associadas serão removidas.`)) return;
-      try {
-        await dbDeleteConta(id_conta);
-        await carregarWallets();
-      } catch(e) {
-        alert('Erro ao excluir: ' + e.message);
-      }
+    // ─── Excluir com modal ───
+    let _deleteContaId = null;
+
+    function confirmarExcluirWallet(id_conta, nome) {
+      _deleteContaId = id_conta;
+      document.getElementById('delete_wallet_nome').textContent = `"${nome}"`;
+      openModal('modal_delete_wallet');
     }
 
+    document.getElementById('btn_confirmar_excluir_wallet').addEventListener('click', async function () {
+      if (!_deleteContaId) return;
+      this.disabled = true;
+      this.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">hourglass_empty</span>Excluindo…';
+      try {
+        await dbDeleteConta(_deleteContaId);
+        _deleteContaId = null;
+        closeModal('modal_delete_wallet');
+        await carregarWallets();
+      } catch(e) {
+        closeModal('modal_delete_wallet');
+        openModal('modal_wallet_error');
+      } finally {
+        this.disabled = false;
+        this.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">delete_forever</span>Excluir';
+      }
+    });
+
+    // ─── Criar carteira via modal ───
     document.getElementById('btn_criar_wallet').addEventListener('click', async function () {
       const nome  = document.getElementById('wallet_nome').value.trim();
       const saldo = parseFloat(document.getElementById('wallet_saldo').value.replace(',', '.')) || 0;
-      if (!nome) { alert('Informe um nome para a carteira.'); return; }
+      if (!nome) {
+        document.getElementById('wallet_nome').focus();
+        return;
+      }
 
       this.disabled = true;
-      this.textContent = 'Criando…';
+      this.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;">hourglass_empty</span>Criando…';
       try {
         await dbAddContaComSaldo(_wUser.id_cliente, nome, saldo);
         document.getElementById('wallet_nome').value  = '';
         document.getElementById('wallet_saldo').value = '';
+        closeModal('modal_new_wallet');
         await carregarWallets();
       } catch(e) {
-        alert('Erro ao criar carteira: ' + e.message);
+        console.error(e);
       } finally {
         this.disabled = false;
-        this.innerHTML = '<span class="material-symbols-outlined">add</span>Adicionar carteira';
+        this.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;">add_card</span>Criar carteira';
       }
     });
 

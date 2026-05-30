@@ -31,7 +31,6 @@
       <span class="appbar_user_name">João Silva</span>
     </div>
     <div class="appbar_actions">
-      <button class="appbar_btn"><span class="material-symbols-outlined">tune</span></button>
       <a href="profile.html" class="appbar_avatar-btn">
         <div class="appbar_user_avatar">JS</div>
       </a>
@@ -42,13 +41,11 @@
     <div class="page_inner">
 
       <div class="page_head">
-        <div>
-          <h1 class="page_title">Atividade</h1>
-          <p class="page_subtitle">Maio 2026</p>
-        </div>
+        <h1 class="page_title">Atividade</h1>
         <div class="month-nav">
-          <button class="month-nav_btn"><span class="material-symbols-outlined">chevron_left</span></button>
-          <button class="month-nav_btn"><span class="material-symbols-outlined">chevron_right</span></button>
+          <button id="tx_mes_prev" class="month-nav_btn"><span class="material-symbols-outlined">chevron_left</span></button>
+          <span id="tx_mes_label" class="month-nav_label">—</span>
+          <button id="tx_mes_next" class="month-nav_btn"><span class="material-symbols-outlined">chevron_right</span></button>
         </div>
       </div>
 
@@ -59,14 +56,14 @@
             <span class="material-symbols-outlined icon-fill">south</span>
             <span class="summary-card_label">Receitas</span>
           </div>
-          <span class="summary-card_amount">R$ 8.500,00</span>
+          <span id="tx_total_receitas" class="summary-card_amount">R$ 0,00</span>
         </div>
         <div class="summary-card expense">
           <div class="summary-card_header">
             <span class="material-symbols-outlined icon-fill">north</span>
             <span class="summary-card_label">Despesas</span>
           </div>
-          <span class="summary-card_amount">R$ 6.219,80</span>
+          <span id="tx_total_despesas" class="summary-card_amount">R$ 0,00</span>
         </div>
       </div>
 
@@ -461,11 +458,40 @@
   <script src="../js/app.js"></script>
   <script>
     const _txUser  = JSON.parse(localStorage.getItem('finsight-user') || '{}');
-    let _contas    = [];   // [{ conta, tipo }]
-    let _cats      = [];   // categoria rows
-    let _txAll     = [];   // todas as transações
+    let _contas    = [];
+    let _cats      = [];
+    let _txAll     = [];
     let _txFiltro  = 'todas';
     let _txSearch  = '';
+    let _txOffset  = 0; // 0 = mês atual, -1 = anterior...
+
+    const _MESES_TX = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+    function getTxMesRef() {
+      const d = new Date(); d.setDate(1);
+      d.setMonth(d.getMonth() + _txOffset);
+      return d;
+    }
+    function getTxMesPrefixo() {
+      const d = getTxMesRef();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    }
+    function atualizarLabelTxMes() {
+      const d = getTxMesRef();
+      document.getElementById('tx_mes_label').textContent = `${_MESES_TX[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    document.getElementById('tx_mes_prev').addEventListener('click', () => {
+      _txOffset--;
+      atualizarLabelTxMes();
+      renderTransacoes();
+    });
+    document.getElementById('tx_mes_next').addEventListener('click', () => {
+      if (_txOffset >= 0) return;
+      _txOffset++;
+      atualizarLabelTxMes();
+      renderTransacoes();
+    });
     let _txDetalhe = null; // transação aberta no modal de detalhe
 
     function parseCat(raw) {
@@ -513,7 +539,10 @@
 
     // ─── Render transações ───
     function txFiltradas() {
+      const mesPrefixo = getTxMesPrefixo();
       return _txAll.filter(tx => {
+        // Filtra pelo mês selecionado
+        if (!(tx.data_transacao || '').startsWith(mesPrefixo)) return false;
         const isCredito = tx.debitocredito;
         if (_txFiltro === 'receitas'  && !isCredito) return false;
         if (_txFiltro === 'despesas'  && isCredito)  return false;
@@ -529,19 +558,18 @@
     function renderTransacoes() {
       const container = document.getElementById('tx_container');
       const lista = txFiltradas();
+      const mesPrefixo = getTxMesPrefixo();
 
-      // Totais do mês corrente
-      const now = new Date();
-      const mesAtual = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+      // Totais do mês selecionado
       let totalRec = 0, totalDesp = 0;
       _txAll.forEach(tx => {
-        if ((tx.data_transacao||'').startsWith(mesAtual)) {
+        if ((tx.data_transacao||'').startsWith(mesPrefixo)) {
           if (tx.debitocredito) totalRec  += parseFloat(tx.valor);
           else                   totalDesp += parseFloat(tx.valor);
         }
       });
-      document.querySelector('.summary-card.income .summary-card_amount').textContent = 'R$ ' + fmtBRL(totalRec);
-      document.querySelector('.summary-card.expense .summary-card_amount').textContent = 'R$ ' + fmtBRL(totalDesp);
+      document.getElementById('tx_total_receitas').textContent = 'R$ ' + fmtBRL(totalRec);
+      document.getElementById('tx_total_despesas').textContent = 'R$ ' + fmtBRL(totalDesp);
 
       if (!lista.length) {
         container.innerHTML = '<p style="color:var(--clr-on-surface-variant);text-align:center;padding:40px 0;">Nenhuma transação encontrada.</p>';
@@ -753,6 +781,7 @@
     }
 
     async function init() {
+      atualizarLabelTxMes();
       [_contas, _cats] = await Promise.all([
         dbGetContas(_txUser.id_cliente),
         dbGetCategorias()
