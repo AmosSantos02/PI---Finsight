@@ -190,3 +190,4 @@ Preenchido: adicionar classe `icon_fill`
 ## Histórico de atualizações
 
 - [2026-05-25] CLAUDE.md criado com documentação completa do estado atual do projeto
+- [2026-06-08] Verificado histórico git: sem trailers `Co-Authored-By` no código. Menção residual ao "claude" nos Contributors do GitHub é cache antigo; push novo dispara recálculo.
